@@ -13,7 +13,8 @@
       "Bash(git push:*)",
       "Bash(xargs sed -i '' \"s|from ''''@/components/ui/|from ''''@fobrix/ui/primitives/|g\")",
       "Bash(xargs sed -i '' \"s|from ''''@/utils/css/cn''''|from ''''@fobrix/ui/lib/utils''''|g\")",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npm run storybook:build:*)"
     ]
   }
 }
