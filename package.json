@@ -8,8 +8,8 @@
   "exports": {
     ".": "./src/index.js",
     "./package.json": "./package.json",
-    "./ui/*": "./src/ui/*.jsx",
-    "./ui/data-table/*": "./src/ui/data-table/*.jsx",
+    "./primitives/*": "./src/primitives/*.jsx",
+    "./primitives/data-table/*": "./src/primitives/data-table/*.jsx",
     "./lib/utils": "./src/lib/utils.js",
     "./hooks/*": "./src/hooks/*.js",
     "./styles/globals.css": "./src/styles/globals.css"

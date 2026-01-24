@@ -190,7 +190,7 @@ grep -r "from '@/components/ui/" src/ --include="*.jsx" --include="*.js"
 
 # Update imports (example)
 # Before: import { Button } from '@/components/ui/button';
-# After:  import { Button } from '@fobrix/ui/ui/button';
+# After:  import { Button } from '@fobrix/ui/primitives/button';
 ```
 
 **Files to update:**
@@ -239,7 +239,7 @@ import { Button, Dialog, Input, cn } from '@fobrix/ui';
 
 ### Option B: Import from specific paths
 ```jsx
-import { Button } from '@fobrix/ui/ui/button';
+import { Button } from '@fobrix/ui/primitives/button';
 import { cn } from '@fobrix/ui/lib/utils';
 import { useIsMobile } from '@fobrix/ui/hooks/use-mobile';
 ```
