@@ -55,6 +55,12 @@ export { default as OutlineToggleGroup } from './components/OutlineToggleGroup';
 export { default as CustomTab } from './components/CustomTab';
 export { default as TableOrCards } from './components/TableOrCards';
 export { default as GoogleIcon } from './components/GoogleIcon';
+export { default as AppBreadcrumbs } from './components/AppBreadcrumbs';
+export { default as ExportConfirmDialog } from './components/ExportConfirmDialog';
+export { ProgressProvider } from './components/ProgressProvider';
+export { default as ServiceWorkerRegistration } from './components/ServiceWorkerRegistration';
+export { SnackbarProvider, useSnackbar } from './components/SnackbarProvider';
+export { default as StatsBarContainer } from './components/StatsBarContainer';
 export { AnimatedGridPattern } from './components/magicui/animated-grid-pattern';
 export { AuroraText } from './components/magicui/aurora-text';
 

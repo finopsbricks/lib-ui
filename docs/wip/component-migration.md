@@ -15,7 +15,7 @@ This document tracks the migration of shared components from `engine.fobrix.com`
 | Batch | Description | Components | Status |
 |-------|-------------|------------|--------|
 | **Batch 1** | UI Primitives (shadcn/ui) | 40 | ✅ Complete |
-| **Batch 2** | Common Feature Components | 13 migrated | ⏳ In Progress |
+| **Batch 2** | Common Feature Components | 20 | ✅ Complete |
 | **Batch 3** | Navigation & Layout | ~15 | ⏳ Pending |
 | **Cleanup** | Update imports & delete duplicates | - | ⏳ Pending |
 
@@ -75,9 +75,9 @@ This document tracks the migration of shared components from `engine.fobrix.com`
 
 ---
 
-## Batch 2: Common Feature Components ⏳ IN PROGRESS
+## Batch 2: Common Feature Components ✅ COMPLETE
 
-### Components Migrated (13)
+### Components Migrated (20)
 
 | Component | Source | Stories | Notes |
 |-----------|--------|---------|-------|
@@ -93,27 +93,26 @@ This document tracks the migration of shared components from `engine.fobrix.com`
 | CustomTab.jsx | Engine | - | URL-synced tabs with badge support |
 | TableOrCards.jsx | Engine | - | View toggle (table/cards) with localStorage |
 | GoogleIcon.jsx | Engine | - | Google OAuth SVG icon |
+| AppBreadcrumbs.jsx | Engine | - | Sidebar + breadcrumb header |
+| ExportConfirmDialog.jsx | Engine | - | Export format selection dialog |
+| ProgressProvider.jsx | Engine | - | Page transition progress bar |
+| ServiceWorkerRegistration.jsx | Engine | - | PWA service worker registration |
+| SnackbarProvider.jsx | Engine | - | Toast notifications with sonner |
+| StatsBarContainer.jsx | Engine | - | Metrics display bar |
 | magicui/animated-grid-pattern.jsx | Engine | - | Animated SVG grid background |
 | magicui/aurora-text.jsx | Engine | - | Gradient animated text |
 
-### Components Remaining
+### Components NOT Migrated (app-specific)
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| PeriodSelector.jsx | Skip | Uses app-specific `PERIOD_OPTIONS` |
-| TableOrCardsWithState.jsx | Skip | Uses app-specific `clientPreferences` |
-| Logo.jsx | Skip | References app-specific `/logo.svg` asset |
-| switchless/ShowJSON.jsx | Skip | `react-json-tree` incompatible with React 19 |
-| AmplitudeProvider.jsx | Pending | Analytics wrapper |
-| AmplitudeUserIdentifier.jsx | Pending | Analytics wrapper |
-| AppBreadcrumbs.jsx | Pending | May have app-specific routes |
-| ExportConfirmDialog.jsx | Pending | Export dialog |
-| ProgressBar.jsx | Pending | Progress wrapper |
-| PublicNavbar.jsx | Pending | Public pages nav |
-| ServiceWorkerRegistration.jsx | Pending | PWA registration |
-| SnackbarProvider.jsx | Pending | Toast provider |
-| StatsBarContainer.jsx | Pending | Stats display |
-| ErrorMessage/ | Pending | Error display |
+| Component | Reason |
+|-----------|--------|
+| PeriodSelector.jsx | Uses app-specific `PERIOD_OPTIONS` constant |
+| TableOrCardsWithState.jsx | Uses app-specific `clientPreferences` util |
+| Logo.jsx | References app-specific `/logo.svg` asset |
+| PublicNavbar.jsx | Uses local Logo component |
+| AmplitudeProvider.jsx | App-specific API key configuration |
+| AmplitudeUserIdentifier.jsx | Depends on AmplitudeProvider |
+| switchless/ShowJSON.jsx | `react-json-tree` incompatible with React 19 |
 
 ### Migration Steps for Each Component
 
@@ -353,14 +352,19 @@ Align fobrix-ui Storybook setup with engine.fobrix.com:
 
 ## Changelog
 
-### 2026-01-24
-- **Migrated 13 Batch 2 components**:
+### 2026-01-24 (Session 2)
+- **Completed Batch 2 migration (20 components total)**:
+  - Added: AppBreadcrumbs, ExportConfirmDialog, ProgressProvider, ServiceWorkerRegistration, SnackbarProvider, StatsBarContainer
+- Added dependency: `@bprogress/next`
+- Identified 7 components to stay in apps (app-specific dependencies)
+
+### 2026-01-24 (Session 1)
+- **Migrated 14 Batch 2 components**:
   - HIGH priority: Markdown, DatePicker, MultiSelect, Table
   - Medium priority: AlertBox, Link, PageHeader, Pagination, OutlineToggleGroup, CustomTab, TableOrCards
   - Low priority: GoogleIcon, magicui/animated-grid-pattern, magicui/aurora-text
 - Added dependencies: `react-markdown`, `remark-gfm`, `prop-types`, `framer-motion`
 - Added export paths: `./components/*`, `./components/magicui/*`
-- Skipped: PeriodSelector, TableOrCardsWithState, Logo (app-specific), ShowJSON (React 19 incompatible)
 
 ### 2025-01-24
 - Created fobrix-ui repo
