@@ -42,6 +42,22 @@ export * from './primitives/typography';
 export * from './primitives/data-table/data-table';
 export * from './primitives/data-table/DateHeader';
 
+// Components (Batch 2)
+export { default as Markdown } from './components/Markdown';
+export { default as DatePicker } from './components/DatePicker';
+export { MultiSelect } from './components/MultiSelect';
+export { default as Table } from './components/Table';
+export { default as AlertBox } from './components/AlertBox';
+export { default as Link } from './components/Link';
+export { default as PageHeader } from './components/PageHeader';
+export { default as Pagination } from './components/Pagination';
+export { default as OutlineToggleGroup } from './components/OutlineToggleGroup';
+export { default as CustomTab } from './components/CustomTab';
+export { default as TableOrCards } from './components/TableOrCards';
+export { default as GoogleIcon } from './components/GoogleIcon';
+export { AnimatedGridPattern } from './components/magicui/animated-grid-pattern';
+export { AuroraText } from './components/magicui/aurora-text';
+
 // Utilities
 export { cn } from './lib/utils';
 

@@ -10,6 +10,8 @@
     "./package.json": "./package.json",
     "./primitives/*": "./src/primitives/*.jsx",
     "./primitives/data-table/*": "./src/primitives/data-table/*.jsx",
+    "./components/*": "./src/components/*.jsx",
+    "./components/magicui/*": "./src/components/magicui/*.jsx",
     "./lib/utils": "./src/lib/utils.js",
     "./hooks/*": "./src/hooks/*.js",
     "./styles/globals.css": "./src/styles/globals.css"
@@ -52,9 +54,13 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.0.0",
     "lucide-react": "^0.523.0",
+    "prop-types": "^15.8.1",
     "react-day-picker": "^9.9.0",
+    "react-markdown": "^10.1.0",
     "react-resizable-panels": "^3.0.6",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1"
   },

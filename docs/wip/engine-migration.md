@@ -1,4 +1,4 @@
-# WIP: Engine Migration to @fobrix/ui
+# ~~WIP:~~ Engine Migration to @fobrix/ui - COMPLETE
 
 ## Overview
 
@@ -6,15 +6,17 @@ Migrate engine.fobrix.com from local `@/components/ui/` to `@fobrix/ui` package.
 
 **Goal**: Delete all duplicate UI components from engine, use centralized @fobrix/ui library.
 
+**Status**: ✅ **COMPLETE** (2026-01-24)
+
 ---
 
 ## Migration Stats
 
 | Metric | Count |
 |--------|-------|
-| UI components to migrate | 40 |
-| Import statements to update | 109 |
-| `cn` utility imports | 13 |
+| UI components migrated | 40 |
+| Import statements updated | 111 |
+| `cn` utility imports updated | 17 |
 | `use-mobile` hook imports | 0 |
 
 ---
@@ -22,93 +24,51 @@ Migrate engine.fobrix.com from local `@/components/ui/` to `@fobrix/ui` package.
 ## Pre-Migration Checklist
 
 - [x] Add `transpilePackages: ['@fobrix/ui']` to `next.config.mjs`
+- [x] Add Tailwind v4 `@source` directive (see below)
 - [x] Test with one component (SentryTestClient.jsx)
-- [ ] Verify all components exist in @fobrix/ui
+- [x] Verify all components exist in @fobrix/ui
+
+### Tailwind v4 Configuration (Critical)
+
+Add this to `src/app/globals.css` after the imports:
+
+```css
+@source "../../node_modules/@fobrix/ui/src/**/*.{js,jsx}";
+```
+
+This tells Tailwind v4 to scan `@fobrix/ui` for CSS classes. Without this, styles won't be compiled and the UI will be broken.
 
 ---
 
 ## Migration Steps
 
-### Phase 1: Update Imports (do NOT delete yet)
+### Phase 1: Update Imports ✅
 
-Update all imports from `@/components/ui/X` to `@fobrix/ui/primitives/X`.
+All imports updated from `@/components/ui/X` to `@fobrix/ui/primitives/X`.
 
-| Component | Import Count | Status |
-|-----------|--------------|--------|
-| button | 20 | ⏳ |
-| badge | 8 | ⏳ |
-| typography | 6 | ⏳ |
-| sidebar | 5+ | ⏳ |
-| separator | 5 | ⏳ |
-| alert | 5 | ⏳ |
-| input | 4 | ⏳ |
-| dialog | 4 | ⏳ |
-| breadcrumb | 3 | ⏳ |
-| label | 3 | ⏳ |
-| card | 3 | ⏳ |
-| tabs | 2 | ⏳ |
-| table | 6 | ⏳ |
-| dropdown-menu | 2 | ⏳ |
-| data-table | 2 | ⏳ |
-| accordion | - | ⏳ |
-| alert-dialog | - | ⏳ |
-| avatar | - | ⏳ |
-| button-group | - | ⏳ |
-| calendar | - | ⏳ |
-| checkbox | - | ⏳ |
-| collapsible | - | ⏳ |
-| combobox | - | ⏳ |
-| command | - | ⏳ |
-| popover | - | ⏳ |
-| progress | - | ⏳ |
-| resizable | - | ⏳ |
-| select | - | ⏳ |
-| sheet | - | ⏳ |
-| skeleton | - | ⏳ |
-| slider | - | ⏳ |
-| sonner | - | ⏳ |
-| stack | - | ⏳ |
-| switch | - | ⏳ |
-| textarea | - | ⏳ |
-| timeline | - | ⏳ |
-| toggle | - | ⏳ |
-| toggle-group | - | ⏳ |
-| tooltip | - | ⏳ |
+| Component | Status |
+|-----------|--------|
+| All 40 components | ✅ Done |
 
-### Phase 2: Update Utility Imports
+### Phase 2: Update Utility Imports ✅
 
-| Import | From | To | Count |
-|--------|------|-----|-------|
-| cn | `@/utils/css/cn` | `@fobrix/ui/lib/utils` | 13 |
-| useIsMobile | `@/hooks/use-mobile` | `@fobrix/ui/hooks/use-mobile` | 0 |
+| Import | From | To | Status |
+|--------|------|-----|--------|
+| cn | `@/utils/css/cn` | `@fobrix/ui/lib/utils` | ✅ Done |
 
-### Phase 3: Verify Build
+### Phase 3: Verify Build ✅
 
-```bash
-cd /Users/alex/ec2code/cashflowy/engine.fobrix.com
-npm run build
-```
+Build passed successfully.
 
-### Phase 4: Delete Duplicates
+### Phase 4: Delete Duplicates ✅
 
-Only after build passes:
+Deleted:
+- `src/components/ui/` (entire directory)
+- `src/utils/css/cn.js`
 
-```bash
-# Delete UI components
-rm -rf src/components/ui/
+### Phase 5: Final Verification ✅
 
-# Delete utilities (if fully migrated)
-rm src/utils/css/cn.js
-rm src/hooks/use-mobile.js
-```
-
-### Phase 5: Final Verification
-
-```bash
-npm run build
-npm run dev
-# Manual smoke test of key pages
-```
+Build passes after deletion.
 
 ---
 
@@ -136,41 +96,8 @@ import { cn } from '@fobrix/ui/lib/utils';
 
 ---
 
-## Automated Migration Script
-
-```bash
-# Run from engine.fobrix.com root
-
-# Update UI component imports
-find src -name "*.jsx" -o -name "*.js" | xargs sed -i '' "s|from '@/components/ui/|from '@fobrix/ui/primitives/|g"
-
-# Update cn utility imports
-find src -name "*.jsx" -o -name "*.js" | xargs sed -i '' "s|from '@/utils/css/cn'|from '@fobrix/ui/lib/utils'|g"
-```
-
-⚠️ **Warning**: Review changes after running script. Some edge cases may need manual fixes.
-
----
-
-## Rollback Plan
-
-If migration fails:
-1. `git checkout src/` to restore original imports
-2. Remove `transpilePackages` from next.config.mjs
-3. Investigate specific failures
-
----
-
-## Files Already Migrated
-
-| File | Components Used | Status |
-|------|-----------------|--------|
-| `src/app/admin/sentry-example-page/SentryTestClient.jsx` | Button, Card | ✅ Done |
-
----
-
 ## Notes
 
-- Stories in `@/components/ui/*.stories.jsx` can be deleted (canonical stories live in fobrix-ui)
-- Some components may have engine-specific modifications - diff before deleting
-- Build must pass before deleting any files
+- Migration completed successfully
+- Build passes with only pre-existing ESLint warnings (unrelated to migration)
+- Both single-quoted and double-quoted imports were handled

@@ -8,7 +8,12 @@
       "Bash(npm run storybook:dev:*)",
       "Bash(pkill:*)",
       "Bash(curl:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nRename src/ui to src/primitives for cleaner imports\n\n- Rename folder: src/ui/ → src/primitives/\n- Update package.json exports\n- Update src/index.js barrel exports\n- Add architecture doc for no-build-step decision\n- Add engine migration plan\n\nImport pattern: @fobrix/ui/primitives/button\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(xargs sed -i '' \"s|from ''''@/components/ui/|from ''''@fobrix/ui/primitives/|g\")",
+      "Bash(xargs sed -i '' \"s|from ''''@/utils/css/cn''''|from ''''@fobrix/ui/lib/utils''''|g\")",
+      "Bash(npm run build:*)"
     ]
   }
 }

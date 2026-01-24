@@ -15,7 +15,7 @@ This document tracks the migration of shared components from `engine.fobrix.com`
 | Batch | Description | Components | Status |
 |-------|-------------|------------|--------|
 | **Batch 1** | UI Primitives (shadcn/ui) | 40 | ✅ Complete |
-| **Batch 2** | Common Feature Components | ~24 | ⏳ Pending |
+| **Batch 2** | Common Feature Components | 13 migrated | ⏳ In Progress |
 | **Batch 3** | Navigation & Layout | ~15 | ⏳ Pending |
 | **Cleanup** | Update imports & delete duplicates | - | ⏳ Pending |
 
@@ -75,40 +75,45 @@ This document tracks the migration of shared components from `engine.fobrix.com`
 
 ---
 
-## Batch 2: Common Feature Components ⏳ PENDING
+## Batch 2: Common Feature Components ⏳ IN PROGRESS
 
-### Components to Migrate
+### Components Migrated (13)
 
-| Component | Engine | Txn | Drift? | Priority | Notes |
-|-----------|--------|-----|--------|----------|-------|
-| **Markdown.jsx** | ✅ | ✅ | **YES** | HIGH | Engine version is more complete (235 vs 109 lines) |
-| AlertBox.jsx | ✅ | ✅ | Check | Medium | Alert component |
-| AmplitudeProvider.jsx | ✅ | ✅ | Check | Low | Analytics wrapper |
-| AmplitudeUserIdentifier.jsx | ✅ | ✅ | Check | Low | Analytics wrapper |
-| AppBreadcrumbs.jsx | ✅ | ✅ | Check | Medium | May have app-specific routes |
-| CustomTab.jsx | ✅ | ✅ | Check | Medium | Tab component |
-| DatePicker.jsx | ✅ | ✅ | Check | High | Date selection |
-| ExportConfirmDialog.jsx | ✅ | ✅ | Check | Medium | Export dialog |
-| GoogleIcon.jsx | ✅ | ✅ | Check | Low | OAuth icon |
-| Link.jsx | ✅ | ✅ | Check | Low | Next.js Link wrapper |
-| Logo.jsx | ✅ | ✅ | Check | Low | Brand asset |
-| MultiSelect.jsx | ✅ | ✅ | Check | High | Multi-select dropdown |
-| OutlineToggleGroup.jsx | ✅ | ✅ | Check | Medium | Toggle group variant |
-| PageHeader.jsx | ✅ | ✅ | Check | Medium | Page header |
-| Pagination.jsx | ✅ | ✅ | Check | Medium | URL-based pagination |
-| PeriodSelector.jsx | ✅ | ✅ | Check | Medium | Date range selector |
-| ProgressBar.jsx | ✅ | ✅ | Check | Low | Progress wrapper |
-| PublicNavbar.jsx | ✅ | ✅ | Check | Medium | Public pages nav |
-| ServiceWorkerRegistration.jsx | ✅ | ✅ | Check | Low | PWA registration |
-| SnackbarProvider.jsx | ✅ | ✅ | Check | Low | Toast provider |
-| StatsBarContainer.jsx | ✅ | ✅ | Check | Medium | Stats display |
-| Table.jsx | ✅ | ✅ | Check | High | Table wrapper |
-| TableOrCards.jsx | ✅ | ✅ | Check | Medium | Responsive table/cards |
-| TableOrCardsWithState.jsx | ✅ | ✅ | Check | Medium | Stateful version |
-| magicui/animated-grid-pattern.jsx | ✅ | ✅ | Check | Low | Animation |
-| magicui/aurora-text.jsx | ✅ | ✅ | Check | Low | Animation |
-| switchless/ShowJSON.jsx | ✅ | ✅ | Check | Low | JSON viewer |
-| ErrorMessage/ | ✅ | ✅ | Check | Medium | Error display |
+| Component | Source | Stories | Notes |
+|-----------|--------|---------|-------|
+| Markdown.jsx | Engine | - | GitHub-style markdown with tables, code blocks, task lists |
+| DatePicker.jsx | Engine | - | Calendar popover with clear button |
+| MultiSelect.jsx | Engine | - | Searchable multi-select with grouping support |
+| Table.jsx | Engine | - | Size/variant/hover variants on shadcn Table |
+| AlertBox.jsx | Engine | - | Alert wrapper with color variants |
+| Link.jsx | Engine | - | Next.js Link wrapper with styling |
+| PageHeader.jsx | Engine | - | Flexible page header with RightButtons slot |
+| Pagination.jsx | Engine | - | URL-based pagination component |
+| OutlineToggleGroup.jsx | Engine | - | Generic toggle group with size variants |
+| CustomTab.jsx | Engine | - | URL-synced tabs with badge support |
+| TableOrCards.jsx | Engine | - | View toggle (table/cards) with localStorage |
+| GoogleIcon.jsx | Engine | - | Google OAuth SVG icon |
+| magicui/animated-grid-pattern.jsx | Engine | - | Animated SVG grid background |
+| magicui/aurora-text.jsx | Engine | - | Gradient animated text |
+
+### Components Remaining
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| PeriodSelector.jsx | Skip | Uses app-specific `PERIOD_OPTIONS` |
+| TableOrCardsWithState.jsx | Skip | Uses app-specific `clientPreferences` |
+| Logo.jsx | Skip | References app-specific `/logo.svg` asset |
+| switchless/ShowJSON.jsx | Skip | `react-json-tree` incompatible with React 19 |
+| AmplitudeProvider.jsx | Pending | Analytics wrapper |
+| AmplitudeUserIdentifier.jsx | Pending | Analytics wrapper |
+| AppBreadcrumbs.jsx | Pending | May have app-specific routes |
+| ExportConfirmDialog.jsx | Pending | Export dialog |
+| ProgressBar.jsx | Pending | Progress wrapper |
+| PublicNavbar.jsx | Pending | Public pages nav |
+| ServiceWorkerRegistration.jsx | Pending | PWA registration |
+| SnackbarProvider.jsx | Pending | Toast provider |
+| StatsBarContainer.jsx | Pending | Stats display |
+| ErrorMessage/ | Pending | Error display |
 
 ### Migration Steps for Each Component
 
@@ -347,6 +352,15 @@ Align fobrix-ui Storybook setup with engine.fobrix.com:
 ---
 
 ## Changelog
+
+### 2026-01-24
+- **Migrated 13 Batch 2 components**:
+  - HIGH priority: Markdown, DatePicker, MultiSelect, Table
+  - Medium priority: AlertBox, Link, PageHeader, Pagination, OutlineToggleGroup, CustomTab, TableOrCards
+  - Low priority: GoogleIcon, magicui/animated-grid-pattern, magicui/aurora-text
+- Added dependencies: `react-markdown`, `remark-gfm`, `prop-types`, `framer-motion`
+- Added export paths: `./components/*`, `./components/magicui/*`
+- Skipped: PeriodSelector, TableOrCardsWithState, Logo (app-specific), ShowJSON (React 19 incompatible)
 
 ### 2025-01-24
 - Created fobrix-ui repo
