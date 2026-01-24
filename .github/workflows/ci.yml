@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run-all-tests:
+        description: 'Force run all tests (ignore conditionals)'
+        required: false
+        type: boolean
+        default: false
+
+# Required for dorny/test-reporter to create check runs on all trigger types
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  # ============================================
+  # SETUP
+  # ============================================
+  setup-changes:
+    name: "Setup - Detect Changes"
+    runs-on: ubuntu-latest
+    outputs:
+      components: ${{ steps.filter.outputs.components }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            components:
+              - 'src/**'
+              - 'stories/**'
+              - '.storybook/**'
+
+  # ============================================
+  # TESTS (conditional based on changes)
+  # ============================================
+  test-storybook:
+    name: "Test - Storybook"
+    needs: setup-changes
+    if: |
+      github.event.inputs.run-all-tests == 'true' ||
+      needs.setup-changes.outputs.components == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Run Storybook tests
+        run: npm run storybook:test:ci
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "Results - Storybook"
+          path: junit.xml
+          reporter: jest-junit
