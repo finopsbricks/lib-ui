@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document tracks the migration of shared components from `engine.fobrix.com` and `txn.fobrix.com` into this centralized `@fobrix/ui` library.
+This document tracks the migration of shared components from `engine.fobrix.com` - /Users/alex/ec2code/cashflowy/engine.fobrix.com and `txn.fobrix.com` - /Users/alex/ec2code/cashflowy/txn.fobrix.com into this centralized `@fobrix/ui` library.
 
 **Goal**: Single source of truth for all shared UI components, eliminating drift and centralizing stories/tests.
 
@@ -274,13 +274,63 @@ The canonical Storybook lives in this repo (fobrix-ui).
 
 ```bash
 # Run locally
-npm run storybook
+npm run storybook:dev
 
 # Build static
 npm run storybook:build
+
+# Run tests
+npm run storybook:test
+
+# CI pipeline (build + serve + test)
+npm run storybook:test:ci
 ```
 
 **Future consideration**: Deploy Storybook to a URL for team reference.
+
+---
+
+## Storybook Alignment (Phase 0) ✅ IN PROGRESS
+
+### Problem
+
+Initial fobrix-ui setup used `@storybook/react-vite` (Vite-based), but:
+1. Components will use Next.js primitives (`next/link`, `next/image`, etc.)
+2. Engine and txn apps use `@storybook/nextjs` (Webpack-based)
+3. Engineering standards specify `@storybook/nextjs`
+
+### Solution
+
+Align fobrix-ui Storybook setup with engine.fobrix.com:
+
+| Item | Before | After |
+|------|--------|-------|
+| Framework | `@storybook/react-vite` | `@storybook/nextjs` |
+| Build tool | Vite | Webpack (via Next.js) |
+| Tailwind | `@tailwindcss/vite` | `@tailwindcss/postcss` |
+| `test-runner.js` | Missing | Added |
+| `manager.js` | Missing | Added |
+| `mocks/action.js` | Missing | Added |
+| `@chromatic-com/storybook` | Missing | Added |
+| CI scripts | Basic | Full pipeline |
+
+### Changes Made
+
+1. **package.json**
+   - Removed: `@storybook/react-vite`, `@tailwindcss/vite`, `vite`
+   - Added: `@storybook/nextjs`, `@tailwindcss/postcss`, `@chromatic-com/storybook`, `concurrently`, `wait-on`, `playwright`
+   - Updated scripts to match engine
+
+2. **Configuration Files**
+   - `.storybook/main.js` - Switched to `@storybook/nextjs` with webpack action mocking
+   - `.storybook/preview.js` - Added Next.js parameters, mobile-first viewport
+   - `.storybook/test-runner.js` - Added Playwright test config
+   - `.storybook/manager.js` - Added UI theme
+   - `.storybook/mocks/action.js` - Added universal server action mocking
+
+3. **Build System**
+   - Removed: `vite.config.js`
+   - Added: `postcss.config.js` for Tailwind
 
 ---
 

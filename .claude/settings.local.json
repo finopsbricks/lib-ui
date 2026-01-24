@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(xargs ls:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 30 npm run storybook:dev)",
+      "Bash(npm run storybook:dev:*)",
+      "Bash(pkill:*)",
+      "Bash(curl:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}
