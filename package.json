@@ -1,5 +1,5 @@
 {
-  "name": "@fobrix/ui",
+  "name": "@fob/lib-ui",
   "type": "module",
   "version": "0.1.0",
   "description": "Shared UI component library for Fobrix applications",
@@ -12,7 +12,10 @@
     "./primitives/data-table/*": "./src/primitives/data-table/*.jsx",
     "./components/*": "./src/components/*.jsx",
     "./components/magicui/*": "./src/components/magicui/*.jsx",
+    "./components/CronScheduler": "./src/components/CronScheduler/index.js",
+    "./components/CronScheduler/*": "./src/components/CronScheduler/*.jsx",
     "./lib/utils": "./src/lib/utils.js",
+    "./utils/cron": "./src/utils/cron/index.js",
     "./hooks/*": "./src/hooks/*.js",
     "./styles/globals.css": "./src/styles/globals.css"
   },
@@ -40,6 +43,7 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-popover": "^1.1.14",
     "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-radio-group": "^1.2.3",
     "@radix-ui/react-scroll-area": "^1.2.9",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-separator": "^1.1.7",
@@ -54,6 +58,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cron-parser": "^5.0.0",
+    "cronstrue": "^2.50.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.0.0",
     "lucide-react": "^0.523.0",
@@ -84,7 +90,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:cashflowy/fobrix-ui.git"
+    "url": "git@github.com:finopsbricks/lib-ui.git"
   },
   "keywords": [
     "react",

@@ -2,11 +2,11 @@
 
 ## Overview
 
-This document tracks the migration of shared components from `engine.fobrix.com` - /Users/alex/ec2code/cashflowy/engine.fobrix.com and `txn.fobrix.com` - /Users/alex/ec2code/cashflowy/txn.fobrix.com into this centralized `@fobrix/ui` library.
+This document tracks the migration of shared components from `engine.fobrix.com` - /Users/alex/ec2code/cashflowy/engine.fobrix.com and `txn.fobrix.com` - /Users/alex/ec2code/finopsbricks/apps/txn.fobrix.com into this centralized `@fob/lib-ui` library.
 
 **Goal**: Single source of truth for all shared UI components, eliminating drift and centralizing stories/tests.
 
-**Repo**: `github:cashflowy/fobrix-ui`
+**Repo**: `github:cashflowy/lib-ui`
 
 ---
 
@@ -118,7 +118,7 @@ This document tracks the migration of shared components from `engine.fobrix.com`
 
 1. Compare versions in both repos (`diff`)
 2. If different, pick the more complete/recent version
-3. Copy to fobrix-ui with updated imports
+3. Copy to lib-ui with updated imports
 4. Copy associated story files
 5. Test in Storybook
 6. Commit and push
@@ -194,7 +194,7 @@ grep -r "from '@/components/ui/" src/ --include="*.jsx" --include="*.js"
 
 # Update imports (example)
 # Before: import { Button } from '@/components/ui/button';
-# After:  import { Button } from '@fobrix/ui/primitives/button';
+# After:  import { Button } from '@fob/lib-ui/primitives/button';
 ```
 
 **Files to update:**
@@ -211,8 +211,8 @@ Same process as engine.fobrix.com.
 ```bash
 # After all imports are updated and tested
 rm -rf src/components/ui/
-rm src/utils/css/cn.js  # Now in @fobrix/ui
-rm src/hooks/use-mobile.js  # Now in @fobrix/ui
+rm src/utils/css/cn.js  # Now in @fob/lib-ui
+rm src/hooks/use-mobile.js  # Now in @fob/lib-ui
 ```
 
 ### Step 4: Delete duplicates from txn.fobrix.com
@@ -238,14 +238,14 @@ npm run storybook:dev  # If applicable
 
 ### Option A: Import from main entry
 ```jsx
-import { Button, Dialog, Input, cn } from '@fobrix/ui';
+import { Button, Dialog, Input, cn } from '@fob/lib-ui';
 ```
 
 ### Option B: Import from specific paths
 ```jsx
-import { Button } from '@fobrix/ui/primitives/button';
-import { cn } from '@fobrix/ui/lib/utils';
-import { useIsMobile } from '@fobrix/ui/hooks/use-mobile';
+import { Button } from '@fob/lib-ui/primitives/button';
+import { cn } from '@fob/lib-ui/lib/utils';
+import { useIsMobile } from '@fob/lib-ui/hooks/use-mobile';
 ```
 
 ### Recommendation
@@ -260,21 +260,21 @@ Both apps should have this in package.json:
 ```json
 {
   "dependencies": {
-    "@fobrix/ui": "github:cashflowy/fobrix-ui"
+    "@fob/lib-ui": "github:cashflowy/lib-ui"
   }
 }
 ```
 
 To update to latest:
 ```bash
-npm update @fobrix/ui
+npm update @fob/lib-ui
 ```
 
 ---
 
 ## Storybook
 
-The canonical Storybook lives in this repo (fobrix-ui).
+The canonical Storybook lives in this repo (lib-ui).
 
 ```bash
 # Run locally
@@ -298,14 +298,14 @@ npm run storybook:test:ci
 
 ### Problem
 
-Initial fobrix-ui setup used `@storybook/react-vite` (Vite-based), but:
+Initial lib-ui setup used `@storybook/react-vite` (Vite-based), but:
 1. Components will use Next.js primitives (`next/link`, `next/image`, etc.)
 2. Engine and txn apps use `@storybook/nextjs` (Webpack-based)
 3. Engineering standards specify `@storybook/nextjs`
 
 ### Solution
 
-Align fobrix-ui Storybook setup with engine.fobrix.com:
+Align lib-ui Storybook setup with engine.fobrix.com:
 
 | Item | Before | After |
 |------|--------|-------|
@@ -340,7 +340,7 @@ Align fobrix-ui Storybook setup with engine.fobrix.com:
 
 ## Open Questions
 
-1. **CSS Theme**: Apps need matching Tailwind CSS variables. Should apps import `@fobrix/ui/styles/globals.css` or maintain their own?
+1. **CSS Theme**: Apps need matching Tailwind CSS variables. Should apps import `@fob/lib-ui/styles/globals.css` or maintain their own?
 
 2. **Versioning**: Currently using git main branch. Should we tag releases (v0.1.0, v0.2.0)?
 
@@ -367,7 +367,7 @@ Align fobrix-ui Storybook setup with engine.fobrix.com:
 - Added export paths: `./components/*`, `./components/magicui/*`
 
 ### 2025-01-24
-- Created fobrix-ui repo
+- Created lib-ui repo
 - Migrated Batch 1 (40 UI primitives)
 - Added Storybook configuration
 - Added 6 story files

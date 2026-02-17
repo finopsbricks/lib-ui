@@ -1,22 +1,22 @@
-# @fobrix/ui
+# @fob/lib-ui
 
 Shared UI component library for Fobrix applications (engine.fobrix.com, txn.fobrix.com).
 
 ## Installation
 
 ```bash
-npm install github:cashflowy/fobrix-ui
+npm install github:cashflowy/lib-ui
 ```
 
 ## Usage
 
 ```jsx
 // Import from main entry
-import { Button, Dialog, cn } from '@fobrix/ui';
+import { Button, Dialog, cn } from '@fob/lib-ui';
 
 // Or import specific components
-import { Button } from '@fobrix/ui/ui/button';
-import { cn } from '@fobrix/ui/lib/utils';
+import { Button } from '@fob/lib-ui/ui/button';
+import { cn } from '@fob/lib-ui/lib/utils';
 ```
 
 ## Components
@@ -54,7 +54,7 @@ Your app must have Tailwind configured with the same CSS variables used by shadc
 
 ```bash
 # Clone
-git clone git@github.com:cashflowy/fobrix-ui.git
+git clone git@github.com:cashflowy/lib-ui.git
 
 # Install dependencies
 npm install

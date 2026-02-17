@@ -1,10 +1,10 @@
-# ~~WIP:~~ Engine Migration to @fobrix/ui - COMPLETE
+# ~~WIP:~~ Engine Migration to @fob/lib-ui - COMPLETE
 
 ## Overview
 
-Migrate engine.fobrix.com from local `@/components/ui/` to `@fobrix/ui` package.
+Migrate engine.fobrix.com from local `@/components/ui/` to `@fob/lib-ui` package.
 
-**Goal**: Delete all duplicate UI components from engine, use centralized @fobrix/ui library.
+**Goal**: Delete all duplicate UI components from engine, use centralized @fob/lib-ui library.
 
 **Status**: ✅ **COMPLETE** (2026-01-24)
 
@@ -23,20 +23,20 @@ Migrate engine.fobrix.com from local `@/components/ui/` to `@fobrix/ui` package.
 
 ## Pre-Migration Checklist
 
-- [x] Add `transpilePackages: ['@fobrix/ui']` to `next.config.mjs`
+- [x] Add `transpilePackages: ['@fob/lib-ui']` to `next.config.mjs`
 - [x] Add Tailwind v4 `@source` directive (see below)
 - [x] Test with one component (SentryTestClient.jsx)
-- [x] Verify all components exist in @fobrix/ui
+- [x] Verify all components exist in @fob/lib-ui
 
 ### Tailwind v4 Configuration (Critical)
 
 Add this to `src/app/globals.css` after the imports:
 
 ```css
-@source "../../node_modules/@fobrix/ui/src/**/*.{js,jsx}";
+@source "../../node_modules/@fob/lib-ui/src/**/*.{js,jsx}";
 ```
 
-This tells Tailwind v4 to scan `@fobrix/ui` for CSS classes. Without this, styles won't be compiled and the UI will be broken.
+This tells Tailwind v4 to scan `@fob/lib-ui` for CSS classes. Without this, styles won't be compiled and the UI will be broken.
 
 ---
 
@@ -44,7 +44,7 @@ This tells Tailwind v4 to scan `@fobrix/ui` for CSS classes. Without this, style
 
 ### Phase 1: Update Imports ✅
 
-All imports updated from `@/components/ui/X` to `@fobrix/ui/primitives/X`.
+All imports updated from `@/components/ui/X` to `@fob/lib-ui/primitives/X`.
 
 | Component | Status |
 |-----------|--------|
@@ -54,7 +54,7 @@ All imports updated from `@/components/ui/X` to `@fobrix/ui/primitives/X`.
 
 | Import | From | To | Status |
 |--------|------|-----|--------|
-| cn | `@/utils/css/cn` | `@fobrix/ui/lib/utils` | ✅ Done |
+| cn | `@/utils/css/cn` | `@fob/lib-ui/lib/utils` | ✅ Done |
 
 ### Phase 3: Verify Build ✅
 
@@ -81,8 +81,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 // After
-import { Button } from '@fobrix/ui/primitives/button';
-import { Card, CardHeader, CardTitle } from '@fobrix/ui/primitives/card';
+import { Button } from '@fob/lib-ui/primitives/button';
+import { Card, CardHeader, CardTitle } from '@fob/lib-ui/primitives/card';
 ```
 
 ### Utilities
@@ -91,7 +91,7 @@ import { Card, CardHeader, CardTitle } from '@fobrix/ui/primitives/card';
 import { cn } from '@/utils/css/cn';
 
 // After
-import { cn } from '@fobrix/ui/lib/utils';
+import { cn } from '@fob/lib-ui/lib/utils';
 ```
 
 ---

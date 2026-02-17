@@ -42,4 +42,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Utility functions
   - `cn()` helper for className merging (clsx + tailwind-merge)
 - Global styles with CSS custom properties for theming
-- Package exports for subpath imports (`@fobrix/ui/ui/*`, `@fobrix/ui/hooks/*`, etc.)
+- Package exports for subpath imports (`@fob/lib-ui/ui/*`, `@fob/lib-ui/hooks/*`, etc.)

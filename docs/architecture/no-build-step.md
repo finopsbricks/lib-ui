@@ -22,12 +22,12 @@ Component libraries typically have two distribution approaches:
 
 ## Tradeoff
 
-Consuming apps must add `@fobrix/ui` to their Next.js config:
+Consuming apps must add `@fob/lib-ui` to their Next.js config:
 
 ```js
 // next.config.mjs
 const nextConfig = {
-  transpilePackages: ['@fobrix/ui'],
+  transpilePackages: ['@fob/lib-ui'],
   // ... rest of config
 };
 ```
@@ -40,7 +40,7 @@ Next.js doesn't process JSX from `node_modules` by default. The `transpilePackag
 
 | Scenario | What happens |
 |----------|--------------|
-| **transpilePackages** | Next.js transpiles ~40 fobrix-ui files on each build |
+| **transpilePackages** | Next.js transpiles ~40 lib-ui files on each build |
 | **Pre-compiled** | Next.js skips transpiling, uses JS directly |
 
 For ~40 small component files, this is approximately **2-5 seconds** difference per build. Not meaningful for a library this size.
@@ -68,7 +68,7 @@ Consider adding a build step if:
 ```js
 // next.config.mjs
 const nextConfig = {
-  transpilePackages: ['@fobrix/ui'],
+  transpilePackages: ['@fob/lib-ui'],
   // ...
 };
 ```
@@ -78,7 +78,7 @@ const nextConfig = {
 ```js
 // next.config.mjs
 const nextConfig = {
-  transpilePackages: ['@fobrix/ui'],
+  transpilePackages: ['@fob/lib-ui'],
   // ...
 };
 ```

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Migrate engine.fobrix.com to use `@fobrix/ui` Batch 2 components (feature components).
+Migrate engine.fobrix.com to use `@fob/lib-ui` Batch 2 components (feature components).
 
 **Prerequisite**: Phase 1 complete (40 UI primitives migrated)
 
@@ -16,12 +16,12 @@ Migrate engine.fobrix.com to use `@fobrix/ui` Batch 2 components (feature compon
 
 | Component | Import Change | Files Affected |
 |-----------|--------------|----------------|
-| AlertBox | `@/components/AlertBox` → `@fobrix/ui/components/AlertBox` | 1 |
-| AppBreadcrumbs | `@/components/AppBreadcrumbs` → `@fobrix/ui/components/AppBreadcrumbs` | 6 |
-| GoogleIcon | `@/components/GoogleIcon` → `@fobrix/ui/components/GoogleIcon` | 1 |
-| OutlineToggleGroup | `@/components/OutlineToggleGroup` → `@fobrix/ui/components/OutlineToggleGroup` | 2 |
-| PageHeader | `@/components/PageHeader` → `@fobrix/ui/components/PageHeader` | 9 |
-| Table | `@/components/Table` → `@fobrix/ui/components/Table` | 4 |
+| AlertBox | `@/components/AlertBox` → `@fob/lib-ui/components/AlertBox` | 1 |
+| AppBreadcrumbs | `@/components/AppBreadcrumbs` → `@fob/lib-ui/components/AppBreadcrumbs` | 6 |
+| GoogleIcon | `@/components/GoogleIcon` → `@fob/lib-ui/components/GoogleIcon` | 1 |
+| OutlineToggleGroup | `@/components/OutlineToggleGroup` → `@fob/lib-ui/components/OutlineToggleGroup` | 2 |
+| PageHeader | `@/components/PageHeader` → `@fob/lib-ui/components/PageHeader` | 9 |
+| Table | `@/components/Table` → `@fob/lib-ui/components/Table` | 4 |
 | SnackbarProvider | Check if used | - |
 | ProgressProvider | Check if used (ProgressBar.jsx) | - |
 | StatsBarContainer | Check if used | - |
@@ -59,24 +59,24 @@ Migrate engine.fobrix.com to use `@fobrix/ui` Batch 2 components (feature compon
 
 ## Pre-Migration Checklist
 
-- [ ] Update `@fobrix/ui` in engine to latest version
-- [ ] Verify all Batch 2 components are exported from `@fobrix/ui`
+- [ ] Update `@fob/lib-ui` in engine to latest version
+- [ ] Verify all Batch 2 components are exported from `@fob/lib-ui`
 - [ ] Test one component import before bulk update
 
 ```bash
 # In engine.fobrix.com
-npm update @fobrix/ui
+npm update @fob/lib-ui
 ```
 
 ---
 
 ## Migration Steps
 
-### Phase 2.1: Update @fobrix/ui Package
+### Phase 2.1: Update @fob/lib-ui Package
 
 ```bash
 cd /Users/alex/ec2code/cashflowy/engine.fobrix.com
-npm update @fobrix/ui
+npm update @fob/lib-ui
 ```
 
 ### Phase 2.2: Update Component Imports
@@ -97,7 +97,7 @@ import AlertBox from '@/components/AlertBox';
 
 **After:**
 ```js
-import AlertBox from '@fobrix/ui/components/AlertBox';
+import AlertBox from '@fob/lib-ui/components/AlertBox';
 ```
 
 #### AppBreadcrumbs (6 files)
@@ -185,7 +185,7 @@ rm src/components/Table.jsx
 # - src/components/AmplitudeUserIdentifier.jsx
 # - src/components/PeriodSelector.jsx
 # - src/components/TableOrCardsWithState.jsx
-# - src/components/TableOrCards.jsx (keep, uses OutlineToggleGroup from @fobrix/ui)
+# - src/components/TableOrCards.jsx (keep, uses OutlineToggleGroup from @fob/lib-ui)
 # - src/components/switchless/ShowJSON.jsx
 # - src/components/navigation/* (Batch 3)
 # - src/components/layout/* (Batch 3)
@@ -205,17 +205,17 @@ npm run dev
 
 ```js
 // Batch 2 components
-import AlertBox from '@fobrix/ui/components/AlertBox';
-import AppBreadcrumbs from '@fobrix/ui/components/AppBreadcrumbs';
-import GoogleIcon from '@fobrix/ui/components/GoogleIcon';
-import OutlineToggleGroup from '@fobrix/ui/components/OutlineToggleGroup';
-import PageHeader from '@fobrix/ui/components/PageHeader';
-import Table from '@fobrix/ui/components/Table';
-import { SnackbarProvider, useSnackbar } from '@fobrix/ui/components/SnackbarProvider';
-import { ProgressProvider } from '@fobrix/ui/components/ProgressProvider';
-import StatsBarContainer from '@fobrix/ui/components/StatsBarContainer';
-import ServiceWorkerRegistration from '@fobrix/ui/components/ServiceWorkerRegistration';
-import ExportConfirmDialog from '@fobrix/ui/components/ExportConfirmDialog';
+import AlertBox from '@fob/lib-ui/components/AlertBox';
+import AppBreadcrumbs from '@fob/lib-ui/components/AppBreadcrumbs';
+import GoogleIcon from '@fob/lib-ui/components/GoogleIcon';
+import OutlineToggleGroup from '@fob/lib-ui/components/OutlineToggleGroup';
+import PageHeader from '@fob/lib-ui/components/PageHeader';
+import Table from '@fob/lib-ui/components/Table';
+import { SnackbarProvider, useSnackbar } from '@fob/lib-ui/components/SnackbarProvider';
+import { ProgressProvider } from '@fob/lib-ui/components/ProgressProvider';
+import StatsBarContainer from '@fob/lib-ui/components/StatsBarContainer';
+import ServiceWorkerRegistration from '@fob/lib-ui/components/ServiceWorkerRegistration';
+import ExportConfirmDialog from '@fob/lib-ui/components/ExportConfirmDialog';
 ```
 
 ---
@@ -232,6 +232,6 @@ import ExportConfirmDialog from '@fobrix/ui/components/ExportConfirmDialog';
 
 ## Notes
 
-- TableOrCards.jsx stays in engine but will import OutlineToggleGroup from @fobrix/ui
+- TableOrCards.jsx stays in engine but will import OutlineToggleGroup from @fob/lib-ui
 - TableOrCardsWithState.jsx stays (uses app-specific clientPreferences)
 - Batch 3 (Navigation/Layout) will be a separate migration phase
