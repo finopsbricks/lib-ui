@@ -15,6 +15,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.2.0] - 2026-02-18
+
+### Added
+
+- **CronScheduler component suite** - Complete scheduling UI
+  - CronBuilderTabs - Tab-based cron builder interface
+  - CronFieldEditor - Field-level cron editing
+  - CronPresetButtons - Common schedule presets
+  - CronPreview - Visual preview of scheduled runs
+  - CronRawInput - Raw cron expression input
+  - CronScheduler - Main scheduler component
+- **Cron utility functions** (`@fob/lib-ui/utils/cron`)
+  - `buildCronExpression` - Construct cron expressions programmatically
+  - `getCronDescription` - Human-readable cron descriptions
+  - `getNextRuns` - Calculate next execution times
+  - `parseCronExpression` - Parse cron strings into components
+  - `validateCron` - Validate cron expression syntax
+- **New components**
+  - AlertBox - Styled alert/notification display
+  - AppBreadcrumbs - Application navigation breadcrumbs
+  - CustomTab - Custom tab navigation component
+  - DatePicker - Date selection with calendar
+  - ExportConfirmDialog - Export confirmation modal
+  - GoogleIcon - Google Material Design icons
+  - Link - Navigation link component
+  - Markdown - Markdown content renderer with GFM support
+  - MultiSelect - Multi-selection dropdown
+  - OutlineToggleGroup - Outlined toggle button group
+  - PageHeader - Page header with title and actions
+  - Pagination - Pagination controls
+  - ProgressProvider - Progress bar provider (bprogress)
+  - ServiceWorkerRegistration - PWA service worker setup
+  - SnackbarProvider - Toast/snackbar notification system
+- **Storybook stories** for all new components
+- **GitHub Actions CI workflow** for automated testing
+
+### Changed
+
+- **BREAKING**: Renamed `src/ui/` to `src/primitives/` for cleaner import paths
+  - Update imports from `@fob/lib-ui/ui/*` to `@fob/lib-ui/primitives/*`
+- Updated package.json exports to reflect new directory structure
+
+### Fixed
+
+- Component rendering bug fix
+
 ## [0.1.0] - 2026-01-24
 
 ### Added
