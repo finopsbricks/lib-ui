@@ -1,5 +1,5 @@
 import React from 'react';
-import { CronScheduler } from './CronScheduler';
+import CronScheduler from './CronScheduler';
 
 export default {
   title: 'Components/CronScheduler',
