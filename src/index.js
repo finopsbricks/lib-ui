@@ -65,6 +65,15 @@ export { default as StatsBarContainer } from './components/StatsBarContainer';
 export { AnimatedGridPattern } from './components/magicui/animated-grid-pattern';
 export { AuroraText } from './components/magicui/aurora-text';
 
+// Components (Batch 3 - Phase 6)
+export { default as AdminHeader } from './components/AdminHeader';
+export { default as AmplitudeProvider, useAmplitude } from './components/AmplitudeProvider';
+export { default as AmplitudeUserIdentifier } from './components/AmplitudeUserIdentifier';
+export { default as ErrorMessage } from './components/ErrorMessage/ErrorMessage';
+export { default as Logo } from './components/Logo';
+export { FilterTrigger } from './components/FilterTrigger';
+export { default as AppLayout } from './components/layout/AppLayout';
+
 // CronScheduler
 export {
   CronScheduler,
