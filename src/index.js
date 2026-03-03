@@ -67,8 +67,6 @@ export { AuroraText } from './components/magicui/aurora-text';
 
 // Components (Batch 3 - Phase 6)
 export { default as AdminHeader } from './components/AdminHeader';
-export { default as AmplitudeProvider, useAmplitude } from './components/AmplitudeProvider';
-export { default as AmplitudeUserIdentifier } from './components/AmplitudeUserIdentifier';
 export { default as ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 export { default as Logo } from './components/Logo';
 export { FilterTrigger } from './components/FilterTrigger';
