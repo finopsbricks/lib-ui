@@ -1,5 +1,6 @@
 'use client';
-import { Typography, cn } from '@fob/lib-ui';
+import { Typography } from '../primitives/typography';
+import { cn } from '../lib/utils';
 import Link from "next/link";
 import Image from "next/image";
 
