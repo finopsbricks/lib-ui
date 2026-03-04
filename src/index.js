@@ -71,6 +71,8 @@ export { default as ErrorMessage } from './components/ErrorMessage/ErrorMessage'
 export { default as Logo } from './components/Logo';
 export { FilterTrigger } from './components/FilterTrigger';
 export { default as AppLayout } from './components/layout/AppLayout';
+export { default as NotFoundContent } from './components/NotFoundContent';
+export { default as NavItem, NavSubItem, SubMenuPopoverItem } from './components/NavItem';
 
 // CronScheduler
 export {
