@@ -17,7 +17,7 @@ Component libraries typically have two distribution approaches:
 
 1. **Simplicity** - No build tooling to maintain in this repo
 2. **Debugging** - Easier to debug since source maps point to actual source
-3. **Small consumer base** - Only 2 apps (engine, txn) use this library
+3. **Small consumer base** - Only 2 apps (engine, statements) use this library
 4. **Internal library** - Not published to npm for external use
 
 ## Tradeoff
@@ -73,7 +73,7 @@ const nextConfig = {
 };
 ```
 
-### txn.fobrix.com
+### statements.finopsbricks.com
 
 ```js
 // next.config.mjs

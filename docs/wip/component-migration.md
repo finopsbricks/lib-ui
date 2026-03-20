@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document tracks the migration of shared components from `engine.fobrix.com` - /Users/alex/ec2code/cashflowy/engine.fobrix.com and `txn.fobrix.com` - /Users/alex/ec2code/finopsbricks/apps/txn.fobrix.com into this centralized `@fob/lib-ui` library.
+This document tracks the migration of shared components from `engine.fobrix.com` - /Users/alex/ec2code/cashflowy/engine.fobrix.com and `statements.finopsbricks.com` - /Users/alex/ec2code/finopsbricks/apps/statements.finopsbricks.com into this centralized `@fob/lib-ui` library.
 
 **Goal**: Single source of truth for all shared UI components, eliminating drift and centralizing stories/tests.
 
@@ -166,17 +166,17 @@ Navigation components have app-specific logic:
 |-----------|--------|
 | work-records/StepOutputTabs.jsx | Process engine specific |
 
-### txn.fobrix.com only
+### statements.finopsbricks.com only
 | Component | Reason |
 |-----------|--------|
-| AIChatAssistant/ (23 components) | Txn-specific AI chat |
+| AIChatAssistant/ (23 components) | Statements-specific AI chat |
 | Activity/ | Activity log |
 | Charts/ (5 components) | Financial charts |
 | FileDropzone/ | File upload |
-| Filters/FilterContainer.jsx | Txn-specific |
-| Filters/FilterField.jsx | Txn-specific |
-| Filters/FoldFilterContainerWithState.jsx | Txn-specific |
-| Filters/TransactionsFilter.jsx | Txn-specific |
+| Filters/FilterContainer.jsx | Statements-specific |
+| Filters/FilterField.jsx | Statements-specific |
+| Filters/FoldFilterContainerWithState.jsx | Statements-specific |
+| Filters/TransactionsFilter.jsx | Statements-specific |
 | ProcessingSteps.jsx | Upload processing |
 | SourceBadge.jsx | Transaction source |
 | TransactionsTable/ | Inline editing table |
@@ -202,7 +202,7 @@ grep -r "from '@/components/ui/" src/ --include="*.jsx" --include="*.js"
 - [ ] All files in `src/components/` (non-ui)
 - [ ] Any other files importing from `@/components/ui/`
 
-### Step 2: Update imports in txn.fobrix.com
+### Step 2: Update imports in statements.finopsbricks.com
 
 Same process as engine.fobrix.com.
 
@@ -215,7 +215,7 @@ rm src/utils/css/cn.js  # Now in @fob/lib-ui
 rm src/hooks/use-mobile.js  # Now in @fob/lib-ui
 ```
 
-### Step 4: Delete duplicates from txn.fobrix.com
+### Step 4: Delete duplicates from statements.finopsbricks.com
 
 ```bash
 rm -rf src/components/ui/
@@ -300,7 +300,7 @@ npm run storybook:test:ci
 
 Initial lib-ui setup used `@storybook/react-vite` (Vite-based), but:
 1. Components will use Next.js primitives (`next/link`, `next/image`, etc.)
-2. Engine and txn apps use `@storybook/nextjs` (Webpack-based)
+2. Engine and statements apps use `@storybook/nextjs` (Webpack-based)
 3. Engineering standards specify `@storybook/nextjs`
 
 ### Solution

@@ -38,7 +38,7 @@ export { default as AmplitudeProvider, useAmplitude } from './components/Amplitu
 export { default as AmplitudeUserIdentifier } from './components/AmplitudeUserIdentifier';
 ```
 
-### txn (2 files)
+### statements (2 files)
 
 - `src/app/layout.jsx` — `'@fob/lib-ui'` → `'@fob/lib-ui/amplitude'` for AmplitudeProvider
 - `src/components/navigation/AppSidebar.jsx` — split `{ Logo, AmplitudeUserIdentifier }` into two imports
@@ -55,5 +55,5 @@ export { default as AmplitudeUserIdentifier } from './components/AmplitudeUserId
 ## Verification
 
 1. `npm run build` in auth — succeeds without amplitude installed
-2. `npm run build` in txn — succeeds with new import paths
+2. `npm run build` in statements — succeeds with new import paths
 3. `npm run build` in orchestrator — succeeds with new import paths

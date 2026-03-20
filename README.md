@@ -1,6 +1,6 @@
 # @fob/lib-ui
 
-Shared UI component library for Fobrix applications (engine.fobrix.com, txn.fobrix.com).
+Shared UI component library for Fobrix applications (engine.fobrix.com, statements.finopsbricks.com).
 
 ## Installation
 

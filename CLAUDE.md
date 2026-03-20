@@ -11,7 +11,7 @@ Guidance for Claude Code when working with this package.
 This package is part of the **FinOpsBricks** monorepo (`/Users/alex/ec2code/finopsbricks/`):
 
 - **`apps/orchestrator.finopsbricks.com`** — Consumes this package for UI components.
-- **`apps/txn.finopsbricks.com`** — Consumes this package for UI components.
+- **`apps/statements.finopsbricks.com`** — Consumes this package for UI components.
 - **`lib/lib-worker`** — Sibling library for worker infrastructure (no UI dependency).
 
 ## Components
