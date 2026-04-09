@@ -5,6 +5,7 @@ import * as React from "react"
 import {
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -46,7 +47,9 @@ import { cn } from "../../lib/utils"
  *   columnResizeMode?: 'onChange' | 'onEnd',
  *   enableColumnResizing?: boolean,
  *   enableSorting?: boolean,
- *   enableColumnFilter?: boolean
+ *   enableColumnFilter?: boolean,
+ *   renderSubComponent?: (row: any) => React.ReactNode,
+ *   getRowCanExpand?: (row: any) => boolean
  * }} props
  * @returns {React.JSX.Element}
  */
@@ -63,12 +66,14 @@ export function DataTable({
   onPaginationChange,
   onFilterChange,
   initialState: passedInitialState,
+  renderSubComponent,
   ...props
 }) {
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [expanded, setExpanded] = React.useState({})
 
   const table = useReactTable({
     data,
@@ -76,16 +81,19 @@ export function DataTable({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onExpandedChange: setExpanded,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      expanded,
     },
     initialState: {
       ...passedInitialState,
@@ -182,35 +190,46 @@ export function DataTable({
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell 
-                        key={cell.id}
-                        style={{
-                          width: cell.column.getSize(),
-                          ...(cell.column.getIsPinned() ? {
-                            left: `${cell.column.getStart('left')}px`,
-                            right: `${cell.column.getAfter('right')}px`,
-                            position: 'sticky',
-                            zIndex: 5,
-                          } : {})
-                        }}
-                        className={cn(
-                          // @ts-ignore - Custom meta property
-                          cell.column.columnDef.meta?.cellClassName,
-                          cell.column.getIsPinned() === 'left' && "!bg-white"
-                        )}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                  <React.Fragment key={row.id}>
+                    <TableRow
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          style={{
+                            width: cell.column.getSize(),
+                            ...(cell.column.getIsPinned() ? {
+                              left: `${cell.column.getStart('left')}px`,
+                              right: `${cell.column.getAfter('right')}px`,
+                              position: 'sticky',
+                              zIndex: 5,
+                            } : {})
+                          }}
+                          className={cn(
+                            // @ts-ignore - Custom meta property
+                            cell.column.columnDef.meta?.cellClassName,
+                            cell.column.getIsPinned() === 'left' && "!bg-white"
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    {row.getIsExpanded() && renderSubComponent && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={row.getVisibleCells().length}
+                          className="bg-muted/20 p-4"
+                        >
+                          {renderSubComponent(row)}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
                 ))
               ) : (
                 <TableRow>
