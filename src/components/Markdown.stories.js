@@ -169,3 +169,65 @@ Try editing this markdown to test different features.
 | More text | More | 99,999.99 |`,
   },
 };
+
+/**
+ * USER JOURNEY STORY 7: Custom Components Override
+ *
+ * Demonstrates the `components` prop for overriding react-markdown renderers.
+ * This is how the orchestrator injects fob:* widget support via DocumentPaperViewer.
+ */
+export const WithComponentsOverride = {
+  args: {
+    children: `# Report with Custom Code Block
+
+Regular markdown renders normally.
+
+\`\`\`custom:banner
+This block is intercepted by the custom pre override.
+\`\`\`
+
+\`\`\`javascript
+// Regular code blocks still render normally
+const x = 42;
+\`\`\`
+`,
+    components: {
+      pre: ({ children, ...props }) => {
+        const class_name = children?.props?.className;
+        if (class_name?.includes("language-custom:banner")) {
+          return (
+            <div style={{
+              margin: "16px 0",
+              padding: "12px 16px",
+              backgroundColor: "#eff6ff",
+              borderLeft: "4px solid #3b82f6",
+              borderRadius: "8px",
+              color: "#1e40af",
+              fontSize: "14px",
+            }}>
+              {String(children.props.children)}
+            </div>
+          );
+        }
+        return (
+          <pre style={{
+            margin: "16px 0",
+            padding: "16px",
+            borderRadius: "8px",
+            backgroundColor: "#f4f4f5",
+            overflow: "auto",
+            fontSize: "14px",
+          }} {...props}>
+            {children}
+          </pre>
+        );
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('Report with Custom Code Block')).toBeInTheDocument();
+    await expect(canvas.getByText(/This block is intercepted/)).toBeInTheDocument();
+    await expect(canvas.getByText(/const x = 42/)).toBeInTheDocument();
+  },
+};

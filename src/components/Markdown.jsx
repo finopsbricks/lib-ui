@@ -224,10 +224,17 @@ const components = {
   },
 };
 
-export default function Markdown({ children, className = "" }) {
+/**
+ * @param {object} props
+ * @param {string} props.children - Markdown content
+ * @param {string} [props.className] - Additional CSS class
+ * @param {Record<string, import('react').ComponentType>} [props.components] - Override react-markdown component renderers
+ */
+export default function Markdown({ children, className = "", components: overrides }) {
+  const merged = overrides ? { ...components, ...overrides } : components;
   return (
     <div className={`markdown-content ${className}`}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={merged}>
         {children}
       </ReactMarkdown>
     </div>
