@@ -27,7 +27,7 @@ export default function SortableHeader({ column, children, align = "left" }) {
       type="button"
       onClick={() => column.toggleSorting(sorted === "asc")}
       className={cn(
-        "inline-flex items-center gap-1 h-8 cursor-pointer hover:text-foreground",
+        "inline-flex items-center gap-1 h-6 cursor-pointer hover:text-foreground",
         alignment,
       )}
     >
