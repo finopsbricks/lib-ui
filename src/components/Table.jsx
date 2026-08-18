@@ -12,11 +12,15 @@ import { cn } from '../lib/utils';
  * @param {React.ReactNode} props.children - Table content
  * @param {'sm' | 'md' | 'lg'} [props.size='sm'] - Table size
  * @param {'soft' | 'outlined' | 'plain'} [props.variant='soft'] - Table visual variant
- * @param {string} [props.className] - Optional additional CSS classes
+ * @param {string} [props.className] - Optional additional CSS classes for the table
+ * @param {string} [props.containerClassName] - Optional classes for the scroll
+ *   container. Bound its height (e.g. `flex-1 min-h-0` inside a flex column) to
+ *   make the table scroll within itself rather than with the page — which is what
+ *   a `sticky` header needs in order to stick to anything.
  * @param {boolean} [props.hoverRow] - Enable hover effect on rows
  * @returns {React.JSX.Element}
  */
-export default function Table({ type = 'topHeader', borderAxis, children, size = 'sm', variant = 'soft', className, hoverRow, ...props }) {
+export default function Table({ type = 'topHeader', borderAxis, children, size = 'sm', variant = 'soft', className, containerClassName, hoverRow, ...props }) {
 	// Map size prop to appropriate padding, text size, and height
 	// sm: Google Sheets-like compact (22px height)
 	// md: Medium size
@@ -45,7 +49,7 @@ export default function Table({ type = 'topHeader', borderAxis, children, size =
 		: '';
 
 	return (
-		<div className="w-full overflow-auto rounded-md border">
+		<div className={cn('w-full overflow-auto rounded-md border', containerClassName)}>
 			<ShadcnTable
 				className={cn(
 					'bg-white',
