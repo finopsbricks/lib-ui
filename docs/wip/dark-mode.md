@@ -1,6 +1,6 @@
 # Dark Mode (Light / Dark / System) Across lib-ui and All Apps
 
-## Status: IN PROGRESS (~30%)
+## Status: IN PROGRESS (~75%)
 
 Add a user-selectable theme (Light, Dark, System) to every FinOpsBricks app. lib-ui owns the
 mechanism: a theme provider, a theme picker, and the light and dark token values. Apps wire it in
@@ -122,60 +122,63 @@ pixel-identical.
       uncommitted in-progress work, so neither can be committed or deployed safely. Apply the
       same edit when they're ready.
 
-### Phase 3: Pilot wiring in txn ❌
+### Phase 3: Pilot wiring in txn ✅
 
-- [ ] Bump `@fob/lib-ui` to `v0.6.0`.
-- [ ] `src/app/layout.jsx`: `<html lang="en" suppressHydrationWarning>` and wrap the body
-      contents in `<ThemeProvider>` (outermost provider inside `<body>`, so `SnackbarProvider`'s
-      Toaster sees it).
-- [ ] `src/components/navigation/NavUser.jsx`: add `<ThemeMenu />` between "Account" and the
+- [x] Bump `@fob/lib-ui` to `v0.6.0`.
+- [x] `src/app/layout.jsx`: `<html lang="en" suppressHydrationWarning>`, with `<ThemeProvider>`
+      as the outermost provider inside `<body>`, so `SnackbarProvider`'s Toaster sees it.
+- [x] `src/components/navigation/NavUser.jsx`: `<ThemeMenu />` between "Account" and the
       separator before "Log out".
-- [ ] Docs pages and `PublicNavbar` already render under the root layout, so they inherit the
-      theme. Decide whether they need their own picker; the default is no for now.
-- [ ] Verification checklist:
-  - [ ] Fresh browser (empty localStorage) renders **light**, even with the OS in dark mode.
-  - [ ] Dark persists across reload and navigation, with **no flash of light** on hard reload
-        (throttle the network and check the first paint).
-  - [ ] System follows OS changes live without a reload.
-  - [ ] No hydration warnings in the console.
-  - [ ] Toasts (sonner) match the selected theme.
-  - [ ] Native controls (scrollbars, date inputs, selects) follow `color-scheme`.
-  - [ ] Light mode is visually unchanged (screenshot compare against the pre-change baseline).
-  - [ ] `npm run lint`, `npm run typecheck` and `npm run build` pass.
-- [ ] Capture dark screenshots of every main txn route (`screenshot-flow`) as the baseline for
-      Phase 5.
+- [x] Docs pages and `PublicNavbar` inherit the theme. No separate picker for now.
+- [x] Verification (production build, Playwright, public routes `/` and `/docs`):
+  - [x] An empty localStorage with the OS in dark renders **light** (`class="light"`, white body).
+  - [x] A stored `dark` applies before first paint. The next-themes script is the first element
+        in `<body>`, ahead of all content, and dark persists across navigation.
+  - [x] `system` follows the OS live (dark→light flip without a reload). `color-scheme` follows.
+  - [x] No hydration warnings. The only console error is a pre-existing SW 404 (txn has no
+        `public/sw.js`).
+  - [x] `lint`, `typecheck`, `test` (272) and `build` pass. CI and Deploy Main are green, and
+        prod serves the theme script.
+  - [ ] **Not verified:** the NavUser menu and toasts on authenticated pages. The screenshot
+        tooling has no login, so this needs a manual check by a signed-in user. The `ThemeMenu`
+        component itself was verified in Storybook (sub-menu opens, radio state, switching).
+- [x] Light mode unchanged: compiled CSS is identical apart from rule order (Phase 2), and
+      `defaultTheme="light"`.
 
-### Phase 4: Roll wiring out to all apps ❌
+### Phase 4: Roll wiring out to all apps ✅
 
-Same three edits per app: bump lib-ui, update `layout.jsx` (`suppressHydrationWarning` +
-`ThemeProvider`), and add `ThemeMenu` to `NavUser`. Then run the Phase 3 verification checklist.
+Same three edits per app: bump lib-ui, update the root layout (`suppressHydrationWarning` +
+`ThemeProvider`), and add `ThemeMenu` to `NavUser`. Each app passed lint + test + build before
+push. Pushes deploy to prod (orchestrator's `main` is its prod branch).
 
-- [ ] app-template, first, so new apps inherit it.
-- [ ] gst-india (v0.5.0)
-- [ ] mdm (v0.5.0)
-- [ ] snapshots (v0.5.0)
-- [ ] ledger (v0.5.0)
-- [ ] statements (v0.5.0)
-- [ ] orchestrator (on **v0.4.6**: read the CHANGELOG for 0.4.6 → 0.6.0 first)
-- [ ] assistant (on **v0.4.4**: same)
-- [ ] console (on **v0.4.2**: same). Root layout is `src/app/layout.js`, and `global-error.jsx`
-      has its own `<html>` that also needs `suppressHydrationWarning`.
-- [ ] finopsbricks.com (marketing, no lib-ui). Decide: leave light-only, or wire `next-themes`
-      directly with a `PublicNavbar` toggle. Default: leave light-only.
+- [x] app-template
+- [x] assistant (was v0.4.4). The v0.4.2→v0.6.0 diff is additive only: no removed files or exports.
+- [x] ledger
+- [x] snapshots
+- [x] orchestrator (was v0.4.6)
+- [x] statements. The full test run had 1 timeout (`equitas_cc__pdf` `beforeAll` > 5s) while 3
+      builds ran in parallel. The suite passes 7/7 on its own.
+- [x] console (was v0.4.2). The root layout is `src/app/layout.js` and the ThemeMenu sits above
+      "Sign Out". `global-error.jsx` uses inline styles with no provider, so it was left as is.
+      Its `typecheck` fails with 35 **pre-existing** errors (`session.user` typing, plus lib-ui
+      `DateHeader`'s `@/types` JSDoc import). console CI doesn't run typecheck. Lint, test and
+      build pass.
+- [ ] gst-india: skipped (not a git repo).
+- [ ] mdm: skipped (no git remote, uncommitted in-progress work).
+- [ ] finopsbricks.com: left light-only (marketing, not on lib-ui).
 
-### Phase 5: Review dark rendering ❌
+### Phase 5: Review dark rendering ✅
 
-The "look at it before fixing it" phase. No code changes; produce a findings list.
+Authenticated app pages couldn't be screenshotted (no login available to the tooling), so the
+review covers lib-ui components in Storybook (dark toolbar), the public txn pages, a token
+contrast audit, and a source scan for hardcoded surfaces. A signed-in walkthrough of each app
+is still worth doing before Phase 7.
 
-- [ ] Screenshot every app's main routes in dark (`screenshot-flow`, `a11y-check` for contrast).
-- [ ] Classify issues:
-  - **Token-level:** the dark palette value itself is wrong. Example: dark
-    `--primary-foreground` (`oklch(0.379 …)`, dark blue) on dark `--primary` (blue) is likely
-    low-contrast. These are fixed once in lib-ui (Phase 6).
-  - **Component-level:** hardcoded colors in lib-ui or in an app (Phase 7).
-  - **Asset-level:** logos, images, illustrations, charts with hex colors.
-- [ ] Record findings in this file under "Dark mode review findings", with the worst offenders
-      first. This becomes the Phase 7 priority list.
+- [x] Token contrast audit (WCAG, computed from the oklch values; script logic in Phase 6).
+- [x] lib-ui stories in dark: AlertBox, DatePicker, ErrorMessage, Markdown, PageHeader,
+      SnackbarProvider, StatsBarContainer, Table, TableOrCards, Button.
+- [x] Public txn pages (`/`, `/docs`) in dark.
+- [x] Findings recorded below.
 
 ### Phase 6: Tune dark token values ❌
 
@@ -208,7 +211,47 @@ Deliberately last. Only start once Phases 1–6 are done and dark mode has been 
 
 ## Dark mode review findings
 
-_(Filled in during Phase 5.)_
+Recorded 2026-10-11, worst first.
+
+**Token-level (fixed in Phase 6):**
+1. `--primary-foreground` / `--sidebar-primary-foreground`: dark blue text on a blue primary,
+   **1.98:1**. Every primary button label was nearly invisible.
+2. `--ring` / `--sidebar-ring`: 2.91:1 against the background (focus rings hard to see).
+3. `--chart-1`: 2.60:1 on `--card`.
+4. `--border`: 2.89:1. It's decorative and matches the shadcn default, so it's left as is.
+5. Light mode has its own pre-existing misses (`primary-foreground` 3.45:1, `muted-foreground`
+   on `muted` 4.39:1, `chart-4/5` < 3:1). Out of scope here because light mode must stay
+   unchanged. Revisit with Phase 7.
+
+**Component-level (Phase 7):** the main failure is *light hardcoded surfaces with token text*.
+Text inherits `--foreground` (near-white) but sits on `bg-white` or `bg-gray-50`, so it
+disappears. Seen on the txn docs page (headings invisible on white), and lib-ui `StatsBarContainer`
+(grey slab, washed-out labels) and `Table` (grey header and body). The reverse case,
+`text-gray-900` on a token-dark surface, gives dark-on-dark text.
+
+| Repo | `bg-white` | `bg-gray/slate-50/100` | `text-gray-800/900` | status `bg-*-50/100` |
+|---|---|---|---|---|
+| statements | 74 | 84 | 73 | 115 |
+| orchestrator | 19 | 19 | 17 | 84 |
+| txn | 11 | 19 | 25 | 44 |
+| ledger | 8 | 13 | 17 | 35 |
+| snapshots | 8 | 13 | 21 | 29 |
+| app-template | 6 | 12 | 13 | 24 |
+| assistant | 5 | 7 | 8 | 20 |
+| lib-ui | 6 | 5 | 3 | 5 |
+| console | 1 | 0 | 0 | 5 |
+
+lib-ui files to fix first: `components/Table.jsx`, `components/SettingsNavigation.jsx`,
+`components/StatsBarContainer.jsx`, `primitives/typography.jsx`, `primitives/timeline.jsx`,
+`primitives/data-table/data-table.jsx`, `primitives/badge.jsx`, `primitives/alert.jsx`,
+`components/CustomTab.jsx`.
+
+**What already looks right in dark:** Alert/AlertBox, Calendar/DatePicker, ErrorMessage, Markdown
+tables, outline/secondary/destructive buttons, inputs, cards, dropdowns and the sidebar (all
+token-based). Sonner toasts follow the theme.
+
+**Asset-level:** the Logo renders dark-on-dark in the public navbar (txn `/docs`). It needs a
+light variant or `currentColor`.
 
 ## Related Files
 
