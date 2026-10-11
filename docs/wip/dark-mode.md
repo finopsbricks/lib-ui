@@ -1,6 +1,6 @@
 # Dark Mode (Light / Dark / System) Across lib-ui and All Apps
 
-## Status: IN PROGRESS (~15%)
+## Status: IN PROGRESS (~30%)
 
 Add a user-selectable theme (Light, Dark, System) to every FinOpsBricks app. lib-ui owns the
 mechanism: a theme provider, a theme picker, and the light and dark token values. Apps wire it in
@@ -101,27 +101,26 @@ Out of scope for now:
 - [x] Release lib-ui **v0.6.0** (minor: new components, no breaking change) and update
       CHANGELOG.md.
 
-### Phase 2: Single source of truth for tokens ❌
+### Phase 2: Single source of truth for tokens ✅
 
 Goal: apps stop carrying their own copy of `:root` and `.dark`, and light rendering stays
 pixel-identical.
 
-- [ ] Decide the import shape. lib-ui `globals.css` already starts with `@import "tailwindcss"` and
-      `@import "tw-animate-css"` and declares the `dark` variant, so an app's `globals.css`
-      becomes `@import "@fob/lib-ui/styles/globals.css";` plus its `@source` line and any
-      app-specific rules. Confirm Tailwind v4 resolves the package export
-      (`./styles/globals.css` is already in `package.json` exports) and that importing tailwindcss
-      once, through lib-ui, doesn't break each app's `@source` scanning.
-- [ ] Pilot in txn. Replace the duplicated header, `@theme inline`, `:root`, `.dark` and base-layer
-      blocks with the import. Keep the txn-only rules (`.scrollbar-auto-hide` and its `.dark`
-      variants). Screenshot-diff key pages in light mode before and after (expect no change).
-- [ ] For apps whose tokens differ from lib-ui, either move the differences into lib-ui (if they
-      are improvements) or keep them as an app-level override block **after** the import, with a
-      comment saying why:
-  - [ ] console (about 10 differing lines)
-  - [ ] finopsbricks.com (about 84 differing lines; marketing site and not on lib-ui, so it may
-        stay standalone)
-- [ ] app-template gets the same treatment, so new apps start clean.
+- [x] Import shape: each app's `globals.css` is now `@import "@fob/lib-ui/styles/globals.css";` +
+      its `@source` line + app-only rules (the `html, body` overflow lock and the
+      `.scrollbar-hide` / `.scrollbar-auto-hide` utilities; snapshots also keeps its
+      react-grid-layout rules). Tailwind v4 resolves the package export, and `tailwindcss` /
+      `tw-animate-css` resolve from the app's `node_modules`.
+- [x] Verification: compiled each app's CSS with `@tailwindcss/postcss` before and after. The
+      output was the same byte length with identical sorted lines (only the unlayered
+      `html, body` rule moved position).
+- [x] Applied to txn, app-template, assistant, ledger, orchestrator, snapshots and statements.
+- [x] console: keeps an app-level `@theme inline` for its Geist fonts. The only output change is
+      that it now gets the `--chart-*` variables (unused in console).
+- [ ] finopsbricks.com: left standalone (marketing site, not on lib-ui).
+- [ ] gst-india and mdm: **skipped**. gst-india isn't a git repo, and mdm has no remote plus
+      uncommitted in-progress work, so neither can be committed or deployed safely. Apply the
+      same edit when they're ready.
 
 ### Phase 3: Pilot wiring in txn ❌
 
