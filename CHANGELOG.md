@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.6.1] - 2026-10-11
+
+### Fixed
+- Dark theme contrast: `--primary-foreground` / `--sidebar-primary-foreground`
+  are now near-white (primary button labels were 1.98:1, now 5.03:1);
+  `--ring` / `--sidebar-ring` and `--chart-1` lightened to blue-500 (5.29:1 and
+  4.71:1). Light theme unchanged.
+
 ## [0.6.0] - 2026-10-11
 
 ### Added

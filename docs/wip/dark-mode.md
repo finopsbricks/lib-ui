@@ -1,6 +1,6 @@
 # Dark Mode (Light / Dark / System) Across lib-ui and All Apps
 
-## Status: IN PROGRESS (~75%)
+## Status: IN PROGRESS (~85%) — Phases 1–6 done; Phase 7 (hardcoded colors) deliberately deferred
 
 Add a user-selectable theme (Light, Dark, System) to every FinOpsBricks app. lib-ui owns the
 mechanism: a theme provider, a theme picker, and the light and dark token values. Apps wire it in
@@ -180,14 +180,18 @@ is still worth doing before Phase 7.
 - [x] Public txn pages (`/`, `/docs`) in dark.
 - [x] Findings recorded below.
 
-### Phase 6: Tune dark token values ❌
+### Phase 6: Tune dark token values ✅
 
-Token-only changes in lib-ui `globals.css`. No component edits.
+Token-only changes in the `.dark` block of lib-ui `globals.css` (light `:root` untouched), released
+as **v0.6.1** and bumped in every wired app.
 
-- [ ] Fix the contrast failures from Phase 5 (WCAG AA: 4.5:1 for body text, 3:1 for large text
-      and UI).
-- [ ] Check `--chart-1…5` legibility on the dark `--card`.
-- [ ] Release a lib-ui patch and bump the apps. Because of Phase 2, this is a version bump only.
+- [x] `--primary-foreground` and `--sidebar-primary-foreground`: `oklch(0.379 0.146 265.522)` →
+      `oklch(0.985 0 0)`. 1.98:1 → **5.03:1**.
+- [x] `--ring` and `--sidebar-ring`: `oklch(0.488 0.243 264.376)` → `oklch(0.623 0.214 259.815)`
+      (blue-500). 2.91:1 → **5.29:1**.
+- [x] `--chart-1`: same blue-500. 2.60:1 → **4.71:1** on `--card`. `chart-2…5` were already
+      ≥ 4.3:1.
+- [x] `--border` left at 2.89:1 (decorative, shadcn default).
 
 ### Phase 7 (LAST): Replace hardcoded colors with semantic tokens ❌
 
@@ -250,8 +254,9 @@ lib-ui files to fix first: `components/Table.jsx`, `components/SettingsNavigatio
 tables, outline/secondary/destructive buttons, inputs, cards, dropdowns and the sidebar (all
 token-based). Sonner toasts follow the theme.
 
-**Asset-level:** the Logo renders dark-on-dark in the public navbar (txn `/docs`). It needs a
-light variant or `currentColor`.
+**Asset-level:** none confirmed yet. The txn public navbar's "Transactions" wordmark disappears,
+but that's token text on a hardcoded white navbar (component-level). Check the logo mark and any
+images once the surfaces are migrated.
 
 ## Related Files
 
