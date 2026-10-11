@@ -15,6 +15,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.6.0] - 2026-10-11
+
+### Added
+- `ThemeProvider` (`@fob/lib-ui/components/ThemeProvider`): Light / Dark / System
+  theming via `next-themes`. Toggles the `dark` class on `<html>`, defaults to
+  light, and persists the choice in localStorage per origin (works for
+  self-hosted apps). The app's `<html>` needs `suppressHydrationWarning`.
+- `ThemeMenu` (`@fob/lib-ui/components/ThemeMenu`): a "Theme" sub-menu for an
+  app's user dropdown.
+- Storybook toolbar toggle to preview any story in light or dark.
+- `docs/architecture/theming.md`: how theming works and how to wire an app.
+- `Table` exposes its scroll container through `containerClassName`.
+
+### Fixed
+- Toasts (`Toaster`/`SnackbarProvider`) followed the OS dark setting even in
+  light-only apps, because no theme provider was mounted. Under `ThemeProvider`
+  they follow the app's theme.
+
 ## [0.5.0] - 2026-08-08
 
 ### Added

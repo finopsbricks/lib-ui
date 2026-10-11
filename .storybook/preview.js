@@ -27,11 +27,31 @@ const preview = {
     },
     layout: 'centered',
   },
+  globalTypes: {
+    theme: {
+      description: 'Color theme',
+      toolbar: {
+        title: 'Theme',
+        icon: 'mirror',
+        items: [
+          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'dark', title: 'Dark', icon: 'moon' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   initialGlobals: {
     viewport: { value: 'mobile1', isRotated: false },
+    theme: 'light',
   },
   decorators: [
     (Story, context) => {
+      if (typeof document !== 'undefined') {
+        const is_dark = context.globals.theme === 'dark';
+        document.documentElement.classList.toggle('dark', is_dark);
+        document.documentElement.style.colorScheme = is_dark ? 'dark' : 'light';
+      }
       const description = context.parameters?.description;
 
       return (

@@ -61,6 +61,8 @@ export { default as ExportConfirmDialog } from './components/ExportConfirmDialog
 export { ProgressProvider } from './components/ProgressProvider';
 export { default as ServiceWorkerRegistration } from './components/ServiceWorkerRegistration';
 export { SnackbarProvider, useSnackbar } from './components/SnackbarProvider';
+export { ThemeProvider } from './components/ThemeProvider';
+export { ThemeMenu } from './components/ThemeMenu';
 export { default as StatsBarContainer } from './components/StatsBarContainer';
 export { AnimatedGridPattern } from './components/magicui/animated-grid-pattern';
 export { AuroraText } from './components/magicui/aurora-text';

@@ -1,6 +1,6 @@
 # Dark Mode (Light / Dark / System) Across lib-ui and All Apps
 
-## Status: NOT STARTED
+## Status: IN PROGRESS (~15%)
 
 Add a user-selectable theme (Light, Dark, System) to every FinOpsBricks app. lib-ui owns the
 mechanism: a theme provider, a theme picker, and the light and dark token values. Apps wire it in
@@ -73,33 +73,32 @@ Out of scope for now:
 
 ## Implementation Phases
 
-### Phase 1: lib-ui theme infrastructure ❌
+### Phase 1: lib-ui theme infrastructure ✅
 
-- [ ] `src/components/ThemeProvider.jsx` (`'use client'`). A thin wrapper around `next-themes`'
+- [x] `src/components/ThemeProvider.jsx` (`'use client'`). A thin wrapper around `next-themes`'
       `ThemeProvider` with lib-ui defaults: `attribute="class"`, `defaultTheme="light"`,
       `enableSystem`, `disableTransitionOnChange`, `themes={['light','dark']}`. Spread props so an
       app can override (for example `forcedTheme="light"` as a kill-switch).
-- [ ] `src/components/ThemeMenu.jsx` (`'use client'`). A `DropdownMenuSub` labeled "Theme" with a
+- [x] `src/components/ThemeMenu.jsx` (`'use client'`). A `DropdownMenuSub` labeled "Theme" with a
       `DropdownMenuRadioGroup` of Light (Sun), Dark (Moon) and System (Monitor) bound to
       `useTheme()`. Guard against the pre-mount `theme === undefined` state, because next-themes
       can't know the theme on the server, so no radio item should render checked until mount.
-- [ ] Optional: `src/components/ThemeToggle.jsx`, a standalone icon button using the same three
+- [ ] Optional (deferred, not needed yet): `src/components/ThemeToggle.jsx`, a standalone icon button using the same three
       options, for pages without `NavUser` (docs and marketing `PublicNavbar`). Build it only if
       Phase 4 needs it.
-- [ ] Export both from `src/index.js` and through the `./components/*` subpath (already covered).
-- [ ] Verify `primitives/sonner.jsx` now follows the provider. It should pass `resolvedTheme` or
+- [x] Export both from `src/index.js` and through the `./components/*` subpath (already covered).
+- [x] Verify `primitives/sonner.jsx` now follows the provider. It should pass `resolvedTheme` or
       `theme`, and both work under next-themes. Confirm toasts match the app theme in all three
       modes.
-- [ ] Storybook: add `@storybook/addon-themes` with `withThemeByClassName({ themes: { light: '',
-      dark: 'dark' }, defaultTheme: 'light' })` in `.storybook/preview.js`, so every story can
+- [x] Storybook: a `theme` toolbar global plus a decorator that toggles `.dark` and `color-scheme` (no new addon dependency) in `.storybook/preview.js`, so every story can
       flip to dark from the toolbar. Make the story decorator's description banner (`bg-sky-50 …
       text-slate-700`) token-based or leave it as is. It's Storybook chrome, not product.
-- [ ] Storybook stories: `ThemeMenu` (inside an open `DropdownMenu`) and a "Theme switching"
+- [x] Storybook stories: `ThemeMenu` (inside an open `DropdownMenu`) and a "Theme switching"
       story showing a few primitives (Card, Button, Input, Table) under each theme.
-- [ ] Docs: short `docs/architecture/theming.md` covering provider setup, `suppressHydrationWarning`,
+- [x] Docs: short `docs/architecture/theming.md` covering provider setup, `suppressHydrationWarning`,
       the localStorage persistence rationale, and the rule "use tokens, not palette classes"
       (enforced later).
-- [ ] Release lib-ui **v0.6.0** (minor: new components, no breaking change) and update
+- [x] Release lib-ui **v0.6.0** (minor: new components, no breaking change) and update
       CHANGELOG.md.
 
 ### Phase 2: Single source of truth for tokens ❌
