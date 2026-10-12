@@ -245,6 +245,9 @@ disappears. Seen on the txn docs page (headings invisible on white), and lib-ui 
 | lib-ui | 6 | 5 | 3 | 5 |
 | console | 1 | 0 | 0 | 5 |
 
+Fixed early (v0.6.2, user-reported): `primitives/data-table/data-table.jsx` table tint and
+pinned-cell backgrounds (`dark:` variants, light unchanged).
+
 lib-ui files to fix first: `components/Table.jsx`, `components/SettingsNavigation.jsx`,
 `components/StatsBarContainer.jsx`, `primitives/typography.jsx`, `primitives/timeline.jsx`,
 `primitives/data-table/data-table.jsx`, `primitives/badge.jsx`, `primitives/alert.jsx`,

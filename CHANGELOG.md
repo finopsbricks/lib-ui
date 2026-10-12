@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.6.2] - 2026-10-12
+
+### Fixed
+- `DataTable` in dark mode: the table's `bg-gray-50/50` tint rendered as a
+  muddy grey slab over the dark background; it's now transparent in dark.
+  Pinned header/body cells fall back to `--background` instead of white.
+  Light mode unchanged.
+
 ## [0.6.1] - 2026-10-11
 
 ### Fixed

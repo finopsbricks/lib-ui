@@ -239,7 +239,7 @@ export function DataTable({
         </div>
       )}
       <div className={cn("rounded-md border flex-1 overflow-auto scrollbar-auto-hide relative", className)}>
-        <table ref={tableRef} style={{ tableLayout }} className={cn("w-full caption-bottom bg-gray-50/50", sizeClasses[size] || sizeClasses.md)}>
+        <table ref={tableRef} style={{ tableLayout }} className={cn("w-full caption-bottom bg-gray-50/50 dark:bg-transparent", sizeClasses[size] || sizeClasses.md)}>
           <TableHeader className="sticky top-0 bg-background z-10">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -283,7 +283,7 @@ export function DataTable({
                           header.column.columnDef.meta?.headerClassName,
                           // Opaque background: a pinned cell visually sits on
                           // top of whatever's scrolled underneath it.
-                          header.column.getIsPinned() && "!bg-white",
+                          header.column.getIsPinned() && "!bg-white dark:!bg-background",
                           // Mark the left edge of the right-pinned zone so
                           // there's a visible boundary between scrolling and
                           // pinned columns (getPinnedIndex === 0 means "first
@@ -344,7 +344,7 @@ export function DataTable({
                           className={cn(
                             // @ts-ignore - Custom meta property
                             cell.column.columnDef.meta?.cellClassName,
-                            cell.column.getIsPinned() && "bg-[var(--row-bg,white)]",
+                            cell.column.getIsPinned() && "bg-[var(--row-bg,white)] dark:bg-[var(--row-bg,var(--background))]",
                             cell.column.getIsPinned() === 'right' && cell.column.getPinnedIndex() === 0 && "border-l"
                           )}
                         >
