@@ -1,12 +1,18 @@
 const { getStoryContext } = require('@storybook/test-runner');
+const { INITIAL_VIEWPORTS } = require('storybook/viewport');
 
 module.exports = {
   // Run tests in parallel for better performance
   workers: 2,
 
+  // Size the page from the story's viewport global so phone stories render at phone width.
   async preVisit(page, context) {
-    // Set viewport for consistent testing
-    await page.setViewportSize({ width: 1366, height: 768 });
+    const story_context = await getStoryContext(page, context);
+    const viewport_key = story_context.storyGlobals?.viewport?.value;
+    const styles = viewport_key && INITIAL_VIEWPORTS[viewport_key]?.styles;
+    await page.setViewportSize(styles
+      ? { width: parseInt(styles.width), height: parseInt(styles.height) }
+      : { width: 1366, height: 768 });
   },
 
   async postVisit(page, context) {

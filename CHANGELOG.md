@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.6.3] - 2026-10-20
+
+### Fixed
+- `PageHeader` on phones: the title and `RightButtons` now share one row below
+  640px instead of stacking a short title above a lone button. With actions, a
+  long title ellipsizes so the actions stay on screen; actions too wide to sit
+  beside the title still wrap onto their own row. Titles without actions are
+  unchanged, and so is the layout at 640px and up.
+- Storybook test runner sizes each story from its `viewport` global, so phone
+  stories are tested at phone width instead of 1366×768.
+
 ## [0.6.2] - 2026-10-12
 
 ### Fixed

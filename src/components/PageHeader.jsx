@@ -32,15 +32,19 @@ export default function PageHeader({
     typography_level = headerLevel;
   }
 
+  // Keep the actions on the title's row: a long title ellipsizes instead of wrapping.
+  // Clip only horizontally so descenders aren't cut off.
+  const title_class = RightButtons ? 'overflow-x-clip text-ellipsis whitespace-nowrap' : undefined;
+
   const renderHeader = () => {
     if (React.isValidElement(header)) {
       return header;  // Return React component as is
     } else if (typeof header === 'string') {
-      return <Typography level={typography_level}>{header}</Typography>
+      return <Typography level={typography_level} className={title_class}>{header}</Typography>
     } else if (typeof header === 'object') {
       const headerParts = Object.values(header);
       return (
-        <Typography level={typography_level}>
+        <Typography level={typography_level} className={title_class}>
           {headerParts.length === 1 ? (
             <span>
               {headerParts[0]}
@@ -63,11 +67,11 @@ export default function PageHeader({
       data-testid='page-header'
       data-cy='page-header'
       className={cn(
-        "flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2"
+        "flex flex-wrap sm:flex-nowrap items-center gap-2"
       )}
       style={{ width: width }}
     >
-      <div className="flex-1">
+      <div className="min-w-0 grow basis-32">
         {renderHeader()}
       </div>
       {RightButtons && (

@@ -4,6 +4,16 @@
 
 import PageHeader from './PageHeader';
 import { Button } from '../primitives/button';
+import { within, expect } from 'storybook/test';
+
+const PHONE = { viewport: { value: 'iphone13', isRotated: false } };
+
+/** Title and actions sit on one row when their boxes overlap vertically. */
+const shareRow = (a, b) => {
+  const ra = a.getBoundingClientRect();
+  const rb = b.getBoundingClientRect();
+  return ra.top < rb.bottom && rb.top < ra.bottom;
+};
 
 const meta = {
   title: 'components/PageHeader',
@@ -91,5 +101,91 @@ export const DeveloperInteractive = {
         <Button variant="default" size="sm">Action 2</Button>
       </div>
     ),
+  },
+};
+
+/**
+ * USER JOURNEY STORY 7: On Phone With One Action
+ * ui/page-header-mobile.md: title and actions share one row at 390.
+ */
+export const OnPhoneWithOneAction = {
+  args: {
+    header: 'Transactions',
+    RightButtons: () => <Button variant="outline" size="sm">Export CSV</Button>,
+  },
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(window.innerWidth).toBe(390);
+    const title = canvas.getByRole('heading', { name: 'Transactions' });
+    const button = canvas.getByRole('button', { name: 'Export CSV' });
+    await expect(shareRow(title, button)).toBe(true);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 8: On Phone With Two Actions
+ */
+export const OnPhoneWithTwoActions = {
+  args: WhenActionsAvailable.args,
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(window.innerWidth).toBe(390);
+    const title = canvas.getByRole('heading', { name: 'User Settings' });
+    await expect(shareRow(title, canvas.getByRole('button', { name: 'Cancel' }))).toBe(true);
+    await expect(shareRow(title, canvas.getByRole('button', { name: 'Save Changes' }))).toBe(true);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 9: On Phone With Long Title
+ * The title truncates; the action stays on the row and on screen.
+ */
+export const OnPhoneWithLongTitle = {
+  args: {
+    header: 'HDFC Bank Current Account Statement Reconciliation',
+    RightButtons: () => <Button variant="outline" size="sm">Export CSV</Button>,
+  },
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(window.innerWidth).toBe(390);
+    const title = canvas.getByRole('heading');
+    const button = canvas.getByRole('button', { name: 'Export CSV' });
+    await expect(shareRow(title, button)).toBe(true);
+    await expect(button.getBoundingClientRect().right).toBeLessThanOrEqual(window.innerWidth);
+    await expect(title.scrollWidth).toBeGreaterThan(title.clientWidth);
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 10: On Phone With Many Actions
+ * Actions too wide to sit beside the title wrap onto their own row.
+ */
+export const OnPhoneWithManyActions = {
+  args: WithMultipleActions.args,
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(window.innerWidth).toBe(390);
+    const title = canvas.getByRole('heading', { name: 'Transaction Review' });
+    const button = canvas.getByRole('button', { name: 'Export CSV' });
+    await expect(button.getBoundingClientRect().top).toBeGreaterThanOrEqual(title.getBoundingClientRect().bottom);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 11: On Desktop With Many Actions
+ */
+export const OnDesktopWithManyActions = {
+  args: WithMultipleActions.args,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const title = canvas.getByRole('heading', { name: 'Transaction Review' });
+    for (const name of ['Export CSV', 'Duplicate', 'Submit Transaction']) {
+      await expect(shareRow(title, canvas.getByRole('button', { name }))).toBe(true);
+    }
   },
 };
