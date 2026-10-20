@@ -15,6 +15,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.7.0] - 2026-10-21
+
+### Added
+- Status tokens: `--warning-subtle`, `--warning-subtle-foreground` and `--warning`
+  (icon), and `--info-subtle`, for light and dark, with `@theme` mappings
+  (`bg-warning-subtle`, `text-warning-subtle-foreground`, `text-warning`,
+  `bg-info-subtle`). They are today's transaction-card comment bands, made into
+  named tokens: warning-subtle is matched to info-subtle in lightness and chroma,
+  so only the hue differs. See design-standards decision 0002.
+- Money direction tokens: `--amount-in` and `--amount-out` (`text-amount-in`,
+  `text-amount-out`). Same colours the transaction cards render today
+  (emerald-700 / amber-700, dark emerald-400 / amber-400).
+- Story "foundations/Status and money colours": swatches, the tokens in use,
+  contrast measured from the rendered colours (light and dark), and the
+  warning/info match, with play functions that fail if a pair drops below AA.
+
 ## [0.6.3] - 2026-10-20
 
 ### Fixed

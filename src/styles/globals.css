@@ -23,6 +23,12 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-warning-subtle-foreground: var(--warning-subtle-foreground);
+  --color-info-subtle: var(--info-subtle);
+  --color-amount-in: var(--amount-in);
+  --color-amount-out: var(--amount-out);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -58,6 +64,13 @@
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
+  /* Status and money tokens: design-standards decision 0002. warning-subtle is matched to info-subtle in L and C. */
+  --warning: oklch(0.476 0.114 61.907);
+  --warning-subtle: oklch(0.976 0.024 92);
+  --warning-subtle-foreground: oklch(0.421 0.095 57.708);
+  --info-subtle: oklch(0.967 0.015 259);
+  --amount-in: oklch(0.508 0.118 165.612);
+  --amount-out: oklch(0.555 0.163 48.998);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.623 0.214 259.815);
@@ -92,6 +105,12 @@
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
+  --warning: oklch(0.945 0.129 101.54);
+  --warning-subtle: oklch(0.279 0.028 90);
+  --warning-subtle-foreground: oklch(0.973 0.071 103.193);
+  --info-subtle: oklch(0.248 0.043 267);
+  --amount-in: oklch(0.765 0.177 163.223);
+  --amount-out: oklch(0.828 0.189 84.429);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.623 0.214 259.815);

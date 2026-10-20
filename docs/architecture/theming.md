@@ -56,3 +56,10 @@ Use semantic token utilities (`bg-background`, `bg-card`, `text-foreground`,
 `text-muted-foreground`, `bg-muted`, `border-border`, `bg-primary`, `text-destructive`, …),
 not raw palette classes (`bg-white`, `text-gray-600`, `bg-red-50`) or hex values. Raw colors don't
 change with the theme. When a raw color is unavoidable, pair it with a `dark:` variant.
+
+Status and money colours have their own tokens (design-standards decision 0002), named by meaning:
+`bg-warning-subtle` with `text-warning-subtle-foreground` and `text-warning` (icon) for something
+that needs attention, `bg-info-subtle` for a done or informational item, and `text-amount-in` /
+`text-amount-out` for money coming in and going out. Don't use `success`/`warning` for money
+direction: a debit isn't a warning. Swatches and measured contrast are in the
+"foundations/Status and money colours" story.
