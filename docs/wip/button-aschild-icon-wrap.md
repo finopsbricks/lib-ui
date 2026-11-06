@@ -28,6 +28,12 @@ renders as:
 
 The button styles (`inline-flex`, `whitespace-nowrap`, `items-center`) land on the `<span>`. The `<a>` is a default inline element, so when its container is narrow the icon wraps to a second line below the text.
 
+### Also found (design-standards component pages, 2026-11-06)
+
+- **No focus ring on the link.** The focus styles (`focus-visible:ring-[3px] ring-ring/50`) are on the span, but the `<a>` is what takes keyboard focus, so a focused button-link shows no ring.
+- **lib-ui uses it itself.** `src/components/Pagination.jsx:33,57` renders Previous and Next as `Button asChild` around a `Link`, so Pagination's links have the bug (see [design-gaps/pagination-landmark-and-current.md](./design-gaps/pagination-landmark-and-current.md)).
+- **The consumer workaround.** design-standards' [Button page](https://design.echoalex.com/components/button) tells consumers to put `buttonVariants()` on the link instead (`<Link className={buttonVariants({ size: 'sm' })}>`), not `<Link><Button>`, which nests a button inside a link. Update that page once this is fixed.
+
 ## Why the span wrapper exists
 
 The current code:
