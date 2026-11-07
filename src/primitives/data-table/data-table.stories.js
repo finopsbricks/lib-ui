@@ -233,13 +233,15 @@ export const FrozenColumnsStayHighlightedOnHover = {
       await expect(getComputedStyle(cell).borderLeftWidth).not.toBe('0px');
     });
 
-    await step('Hovering the row highlights the pinned cell too', async () => {
+    // userEvent.hover dispatches pointer events but doesn't put the row in CSS :hover, so this checks
+    // the shared path instead: hover and selection both set the row's --row-bg, which pinned cells read.
+    await step('Highlighting the row highlights the pinned cell too', async () => {
       const cell = getPinnedCell();
+      const row = cell.closest('tr');
       const restBg = getComputedStyle(cell).backgroundColor;
-      await userEvent.hover(cell);
-      const hoverBg = getComputedStyle(cell).backgroundColor;
-      await expect(hoverBg).not.toBe(restBg);
-      await userEvent.unhover(cell);
+      row.setAttribute('data-state', 'selected');
+      await expect(getComputedStyle(cell).backgroundColor).not.toBe(restBg);
+      row.removeAttribute('data-state');
       await expect(getComputedStyle(cell).backgroundColor).toBe(restBg);
     });
   },

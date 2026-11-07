@@ -47,7 +47,8 @@ jobs:
     if: |
       github.event.inputs.run-all-tests == 'true' ||
       needs.setup-changes.outputs.components == 'true'
-    runs-on: ubuntu-latest
+    # Playwright 1.58 has no browser build for ubuntu-latest (26.04) yet.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
