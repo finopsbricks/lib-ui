@@ -200,11 +200,20 @@ Deliberately last. Only start once Phases 1–6 are done and dark mode has been 
 - [ ] Add status tokens to lib-ui for both modes: `--success`, `--warning`, `--info` (plus
       `-foreground` and a muted surface variant), alongside the existing `--destructive`. Without
       these there is no token to map `bg-red-50 border-red-200 text-red-700`-style alerts to.
+      Partly done in the unreleased **v0.7.0** commit (`f777d1c`): `--warning`,
+      `--warning-subtle`, `--warning-subtle-foreground`, `--info-subtle`, `--amount-in` and
+      `--amount-out`, light and dark (design-standards decision 0002, awaiting Alex's review of the
+      names before the release). `--success` and a success surface are still missing.
 - [ ] Write the mapping table (in `docs/architecture/theming.md`), for example:
       `bg-white` → `bg-background`/`bg-card`; `text-gray-900` → `text-foreground`;
       `text-gray-500/600` → `text-muted-foreground`; `bg-gray-50/100` → `bg-muted`;
       `border-gray-200` → `border-border`; red/green/amber/blue status combinations → status tokens.
 - [ ] lib-ui first (184 uses, 59 hex), then release.
+      The component-level cases have their own WIPs in `docs/wip/design-gaps/`:
+      `status-colours-raw-palette` (Badge, Alert, Timeline), `settings-navigation-hardcoded-colours`,
+      `custom-tab-hardcoded-background` and `filter-trigger-accessible-name` (its blue). The live
+      examples at https://design.echoalex.com/components (theme menu, top right) show each lib-ui
+      component in dark, so a fix can be checked there after bumping design-standards' pin.
 - [ ] Apps, from smallest to largest: console → assistant → app-template → gst-india → mdm →
       snapshots → ledger → txn → orchestrator → statements.
 - [ ] Charts: swap hex series colors for `var(--chart-n)`.

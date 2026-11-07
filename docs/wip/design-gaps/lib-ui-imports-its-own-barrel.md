@@ -8,7 +8,7 @@ Four lib-ui components import from `'@fob/lib-ui'` (the package's own index) ins
 
 ## Problem Statement
 
-`FilterTrigger`, `AdminHeader`, `ErrorMessage` and `AppLayout` import from `'@fob/lib-ui'`. Importing any of them through a deep path (`@fob/lib-ui/components/FilterTrigger`) still loads the whole barrel: every primitive, the Amplitude provider, the cron utilities.
+`FilterTrigger`, `AdminHeader`, `ErrorMessage` and `AppLayout` import from `'@fob/lib-ui'`. Importing any of them through a deep path (`@fob/lib-ui/components/FilterTrigger`) still loads the whole barrel: every primitive and component, and the cron utilities.
 
 One module in the barrel, `DateHeader.jsx`, types its `date` prop with `import('@/types/general/DateString.types')`. That path is an app alias that exists only inside the apps. Any consumer that typechecks with its own `@/*` alias fails on it. design-standards' `npm run typecheck` (run in CI) fails with TS2307 as soon as a page imports `FilterTrigger`, so its filter-panel example rebuilds FilterTrigger from Button and Badge instead of importing it.
 
@@ -35,3 +35,4 @@ To be defined when work on this WIP starts.
 - `src/components/FilterTrigger.jsx:3`
 - `src/components/AdminHeader.jsx`, `src/components/ErrorMessage/ErrorMessage.jsx`, `src/components/layout/AppLayout.jsx`: same import
 - `src/primitives/data-table/DateHeader.jsx:14`: the app-only type path
+- [move-amplitude-out-of-barrel.md](../move-amplitude-out-of-barrel.md): the earlier fix that took Amplitude out of the barrel for a similar reason
