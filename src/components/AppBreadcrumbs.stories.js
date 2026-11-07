@@ -2,6 +2,7 @@
  * AppBreadcrumbs Stories - User Journey Pattern
  */
 
+import { within, expect } from 'storybook/test';
 import AppBreadcrumbs from './AppBreadcrumbs';
 import { SidebarProvider } from '../primitives/sidebar';
 
@@ -80,4 +81,59 @@ export const DeveloperInteractive = {
       { text: 'Current Transaction' }
     ]
   }
+};
+
+const PHONE = { viewport: { value: 'iphone13', isRotated: false } }; // 390 wide
+
+const THREAD_TRAIL = [
+  { text: 'Orgs', href: '/orgs' },
+  { text: 'Kumar & Rao Associates', href: '/orgs/kumar-rao' },
+  { text: 'Mail', href: '/orgs/kumar-rao/mail' },
+  { text: 'Northwind Logistics International Pvt Ltd', href: '/orgs/kumar-rao/mail/mb2?status=waiting' },
+  { text: 'Re: GSTR-2B mismatch for September' },
+];
+
+/**
+ * USER JOURNEY STORY 5: On desktop, deep in the app — the whole trail, no separate back link.
+ */
+export const OnDesktopDeepInApp = {
+  args: { breadcrumbs: THREAD_TRAIL },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Mail' })).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Northwind Logistics International Pvt Ltd' })).toBeVisible();
+    await expect(canvas.getByText('Re: GSTR-2B mismatch for September')).toHaveAttribute('aria-current', 'page');
+    await expect(canvas.getByTestId('breadcrumb-parent')).not.toBeVisible();
+  },
+};
+
+/**
+ * USER JOURNEY STORY 6: On a phone, deep in the app — one link back to the parent page, kept to one line.
+ */
+export const OnPhoneDeepInApp = {
+  args: { breadcrumbs: THREAD_TRAIL },
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const back = canvas.getByRole('link', { name: 'Back to Northwind Logistics International Pvt Ltd' });
+    await expect(back).toBeVisible();
+    await expect(back).toHaveAttribute('href', '/orgs/kumar-rao/mail/mb2?status=waiting');
+    await expect(back.getBoundingClientRect().height).toBeLessThanOrEqual(40);
+    await expect(canvas.getByRole('link', { name: 'Mail', hidden: true })).not.toBeVisible();
+    await expect(canvas.getByText('Re: GSTR-2B mismatch for September')).not.toBeVisible();
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 7: On a phone, on a top-level page — nothing to go back to, so the page's name.
+ */
+export const OnPhoneTopLevel = {
+  args: { breadcrumbs: [{ text: 'Statements' }] },
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('Statements')).toBeVisible();
+    await expect(canvas.queryByTestId('breadcrumb-parent')).toBeNull();
+  },
 };

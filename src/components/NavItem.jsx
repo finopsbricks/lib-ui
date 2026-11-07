@@ -20,8 +20,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '../primitives/popover';
  * }} props
  */
 export default function NavItem({ item, pathname }) {
-  const { state } = useSidebar();
-  const is_collapsed = state === "collapsed";
+  const { state, isMobile, setOpenMobile } = useSidebar();
+  // On phones the sidebar is a sheet over the page; close it once a link is picked.
+  const closeSheet = () => { if (isMobile) setOpenMobile(false); };
+  // The phone sheet always shows labels, whatever the desktop sidebar's collapsed state.
+  const is_collapsed = state === "collapsed" && !isMobile;
   const section_path = pathname.split('/').splice(0, 4).join('/');
   const is_section_active = section_path === item.url;
 
@@ -74,7 +77,7 @@ export default function NavItem({ item, pathname }) {
           <CollapsibleContent>
             <SidebarMenuSub>
               {item.items.map((sub_item) => (
-                <NavSubItem key={sub_item.title} item={sub_item} pathname={pathname} />
+                <NavSubItem key={sub_item.title} item={sub_item} pathname={pathname} onNavigate={closeSheet} />
               ))}
             </SidebarMenuSub>
           </CollapsibleContent>
@@ -86,7 +89,7 @@ export default function NavItem({ item, pathname }) {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild tooltip={item.title} isActive={is_section_active}>
-        <Link href={item.url}>
+        <Link href={item.url} onClick={closeSheet}>
           {item.icon && <item.icon size={16} />}
           <span>{item.title}</span>
         </Link>
@@ -98,10 +101,11 @@ export default function NavItem({ item, pathname }) {
 /**
  * @param {{
  *   item: { title: string, url?: string, items?: Array },
- *   pathname: string
- * }} props
+ *   pathname: string,
+ *   onNavigate?: () => void
+ * }} props - `onNavigate`: called when one of its links is clicked (NavItem closes the phone sheet)
  */
-export function NavSubItem({ item, pathname }) {
+export function NavSubItem({ item, pathname, onNavigate }) {
   if (item.items) {
     const is_expanded = item.url
       ? pathname.startsWith(item.url + '/')
@@ -121,7 +125,7 @@ export function NavSubItem({ item, pathname }) {
               {item.items.map((nested_item) => (
                 <SidebarMenuSubItem key={nested_item.title}>
                   <SidebarMenuSubButton asChild isActive={pathname === nested_item.url}>
-                    <Link href={nested_item.url}>
+                    <Link href={nested_item.url} onClick={onNavigate}>
                       <span>{nested_item.title}</span>
                     </Link>
                   </SidebarMenuSubButton>
@@ -137,7 +141,7 @@ export function NavSubItem({ item, pathname }) {
   return (
     <SidebarMenuSubItem>
       <SidebarMenuSubButton asChild isActive={pathname === item.url}>
-        <Link href={item.url}>
+        <Link href={item.url} onClick={onNavigate}>
           <span>{item.title}</span>
         </Link>
       </SidebarMenuSubButton>

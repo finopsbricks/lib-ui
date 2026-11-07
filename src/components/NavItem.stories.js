@@ -11,7 +11,8 @@
  * - WhenViewingSimpleLink: A basic nav item without sub-items
  * - WhenViewingSectionWithSubItems: A nav item with expandable sub-items
  */
-import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu } from '../primitives/sidebar';
+import { within, expect, userEvent, waitFor } from 'storybook/test';
+import { SidebarProvider, SidebarInset, SidebarTrigger, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu } from '../primitives/sidebar';
 import { LayoutDashboard, BarChart3 } from 'lucide-react';
 import NavItem from './NavItem';
 
@@ -32,6 +33,7 @@ export default {
             </SidebarGroup>
           </SidebarContent>
         </Sidebar>
+        <SidebarInset><div className="p-3"><SidebarTrigger /></div></SidebarInset>
       </SidebarProvider>
     ),
   ],
@@ -63,5 +65,43 @@ export const WhenViewingSectionWithSubItems = {
       ],
     },
     pathname: '/orgs/abc123/reports/balance',
+  },
+};
+
+const PHONE = { viewport: { value: 'iphone13', isRotated: false } }; // 390 wide
+
+/**
+ * Open the phone sheet from the trigger and return it. Link clicks are kept from navigating the
+ * Storybook frame; NavItem's own click handler still runs.
+ */
+const openSheet = async (canvasElement) => {
+  document.addEventListener('click', (event) => {
+    if (event.target instanceof Element && event.target.closest('a')) event.preventDefault();
+  }, { capture: true });
+  await userEvent.click(within(canvasElement).getByRole('button', { name: 'Toggle Sidebar' }));
+  return within(document.body).findByRole('dialog');
+};
+
+/**
+ * On a phone the sidebar is a sheet over the page: picking a link closes it, so the new page shows.
+ */
+export const OnPhoneLinkClosesSheet = {
+  args: WhenViewingSimpleLink.args,
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const sheet = await openSheet(canvasElement);
+    await userEvent.click(await within(sheet).findByRole('link', { name: 'Overview' }));
+    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull());
+  },
+};
+
+/** The same for a link inside an expanded section. */
+export const OnPhoneSubItemClosesSheet = {
+  args: WhenViewingSectionWithSubItems.args,
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const sheet = await openSheet(canvasElement);
+    await userEvent.click(await within(sheet).findByRole('link', { name: 'Cashflow' }));
+    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull());
   },
 };

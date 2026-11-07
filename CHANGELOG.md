@@ -15,9 +15,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [0.7.0] - 2026-10-21
+## [0.7.0] - 2026-11-08
+
+### Fixed
+- `SettingsContainer` on phones: below `md` the settings navigation now sits
+  above the content instead of beside it (which left settings pages ~160px
+  wide and clipped at 390px). The content column has `min-w-0`. Desktop is
+  unchanged.
+- `SettingsNavigation` on phones: one row of links that scrolls sideways when
+  it doesn't fit, keeping the current page in view (also after the row changes
+  width). The current link has `aria-current="page"`; the nav is labelled
+  "Settings". Desktop is unchanged.
+- `AppBreadcrumbs` on phones: a page below the top level shows one link back to
+  its parent (`‹ Parent`, accessible name "Back to Parent") instead of only the
+  current page's name, so a detail page has a way back up without the sidebar.
+  Desktop is unchanged.
+- `NavItem` (and `NavSubItem` inside it) close the phone sidebar sheet when a
+  link is picked, instead of leaving it open over the new page.
+- `NavItem` in the phone sheet shows a section's sub-items as the expandable
+  list, not the collapsed-desktop popover: the sheet always shows labels,
+  whatever the desktop sidebar's collapsed state.
+- Story `DataTable/FrozenColumnsStayHighlightedOnHover` checks the highlight
+  through the row's selected state: `userEvent.hover` never puts a row in CSS
+  `:hover`, so the story failed in every test run.
+- CI runs the Storybook tests on `ubuntu-24.04`: Playwright 1.58 can't install
+  browsers on `ubuntu-latest` (26.04).
 
 ### Added
+- Stories at phone and desktop width with play assertions:
+  `SettingsContainer` (OnDesktop, OnPhone, OnPhoneLastItem), `AppBreadcrumbs`
+  (OnDesktopDeepInApp, OnPhoneDeepInApp, OnPhoneTopLevel), `NavItem`
+  (OnPhoneLinkClosesSheet, OnPhoneSubItemClosesSheet).
 - Status tokens: `--warning-subtle`, `--warning-subtle-foreground` and `--warning`
   (icon), and `--info-subtle`, for light and dark, with `@theme` mappings
   (`bg-warning-subtle`, `text-warning-subtle-foreground`, `text-warning`,
