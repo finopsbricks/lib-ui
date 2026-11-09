@@ -40,7 +40,7 @@ export default function CustomTab({tabs=[], variant='plain', tabName='tab'}) {
       onValueChange={handleTabChange}
       className="w-full flex flex-col flex-1 min-h-0"
     >
-      <div className="w-full border-b border-border bg-white">
+      <div className="w-full border-b border-border bg-background">
         <TabsList
           className={cn(
             "h-auto bg-transparent p-0 justify-start rounded-none border-0",
@@ -83,7 +83,7 @@ export default function CustomTab({tabs=[], variant='plain', tabName='tab'}) {
           key={tab.slug}
           value={tab.slug}
           className={cn(
-            "mt-0 bg-white flex-1 min-h-0 flex flex-col",
+            "mt-0 bg-background flex-1 min-h-0 flex flex-col",
           )}
         >
           {tab.body}

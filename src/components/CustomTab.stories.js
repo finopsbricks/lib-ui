@@ -184,6 +184,32 @@ export const WithCountBadges = {
 };
 
 /**
+ * In dark mode the tab bar and the panel take the page background, so token
+ * text on them (active tab, count badges, panel content) stays readable.
+ */
+export const WithCountBadgesInDark = {
+  args: {
+    tabs: [
+      { slug: 'overview', name: 'Overview', body: <div className="p-6 text-foreground">Select Period</div> },
+      { slug: 'transactions', name: 'Transactions', stats: '12', body: <div className="p-6">Transactions</div> },
+      { slug: 'uploads', name: 'Uploads', stats: '1', body: <div className="p-6">Uploads</div> },
+    ],
+    variant: 'plain',
+    tabName: 'dark_tab',
+  },
+  globals: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page_background = getComputedStyle(document.body).backgroundColor;
+    const tab_bar = canvas.getByRole('tablist').parentElement;
+    const panel = canvas.getByRole('tabpanel');
+    await expect(getComputedStyle(tab_bar).backgroundColor).not.toBe('rgb(255, 255, 255)');
+    await expect(getComputedStyle(panel).backgroundColor).not.toBe('rgb(255, 255, 255)');
+    await expect(getComputedStyle(panel).backgroundColor).toBe(page_background);
+  },
+};
+
+/**
  * USER JOURNEY STORY 3: When Organizing Settings
  */
 export const WhenOrganizingSettings = {

@@ -211,7 +211,7 @@ Deliberately last. Only start once Phases 1–6 are done and dark mode has been 
 - [ ] lib-ui first (184 uses, 59 hex), then release.
       The component-level cases have their own WIPs in `docs/wip/design-gaps/`:
       `status-colours-raw-palette` (Badge, Alert, Timeline), `settings-navigation-hardcoded-colours`,
-      `custom-tab-hardcoded-background` and `filter-trigger-accessible-name` (its blue). The live
+      `custom-tab-hardcoded-background` (fixed in v0.8.2: `bg-background`) and `filter-trigger-accessible-name` (its blue). The live
       examples at https://design.echoalex.com/components (theme menu, top right) show each lib-ui
       component in dark, so a fix can be checked there after bumping design-standards' pin.
 - [ ] Apps, from smallest to largest: console → assistant → app-template → gst-india → mdm →

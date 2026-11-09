@@ -15,6 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.8.2] - 2026-11-09
+
+### Fixed
+- `CustomTab` in dark mode: the tab bar and the tab panels were `bg-white`, so
+  in dark mode they were a white block on a dark page and the token text on
+  them (the active tab, count badges, panel content) disappeared. They now use
+  `bg-background`. Light mode unchanged (`--background` is white).
+
+### Added
+- Story `CustomTab/WithCountBadgesInDark`, asserting the bar and the panel take
+  the page background in dark mode.
+
 ## [0.8.1] - 2026-11-09
 
 ### Added
