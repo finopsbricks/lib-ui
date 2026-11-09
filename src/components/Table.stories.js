@@ -3,6 +3,7 @@
  */
 
 import Table from './Table';
+import { expect, within } from 'storybook/test';
 import {
   TableBody,
   TableCell,
@@ -118,6 +119,23 @@ export const ShowingAccountDetails = {
       </TableBody>
     </Table>
   ),
+};
+
+/**
+ * In dark mode the side-header cells are a muted fill and the table body is
+ * the card colour, so the token text on them stays readable.
+ */
+export const ShowingAccountDetailsInDark = {
+  args: { type: 'sideHeader', size: 'md', variant: 'plain' },
+  globals: { theme: 'dark' },
+  render: ShowingAccountDetails.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const header_cell = canvas.getByText('Account Type');
+    const table = canvasElement.querySelector('table');
+    await expect(getComputedStyle(header_cell).backgroundColor).not.toBe('rgb(249, 250, 251)');
+    await expect(getComputedStyle(table).backgroundColor).not.toBe('rgb(255, 255, 255)');
+  },
 };
 
 /**

@@ -15,6 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.8.3] - 2026-11-10
+
+### Fixed
+- `Table` in dark mode: the table was `bg-white` and `type="sideHeader"` painted
+  the header column `bg-gray-50`, so the token text on them disappeared (the
+  statements account Settings tab). The table and the `outlined` variant use
+  `bg-card`, the side-header column is `bg-muted` in dark, and the `soft` tint
+  is transparent in dark (as `DataTable` in 0.6.2). Light mode unchanged.
+
+### Added
+- Story `Table/ShowingAccountDetailsInDark`.
+
 ## [0.8.2] - 2026-11-09
 
 ### Fixed

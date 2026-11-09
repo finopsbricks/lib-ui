@@ -33,14 +33,14 @@ export default function Table({ type = 'topHeader', borderAxis, children, size =
 
 	// Map variant to appropriate background classes
 	const variantClasses = {
-		'soft': 'bg-gray-50/50',
-		'outlined': 'bg-white',
+		'soft': 'bg-gray-50/50 dark:bg-transparent',
+		'outlined': 'bg-card',
 		'plain': 'bg-transparent'
 	};
 
 	// Apply type-specific styles
 	const typeClasses = type === 'sideHeader'
-		? '[&_tr>*:first-child]:bg-gray-50 [&_tr>*:first-child]:font-light'
+		? '[&_tr>*:first-child]:bg-gray-50 dark:[&_tr>*:first-child]:bg-muted [&_tr>*:first-child]:font-light'
 		: '';
 
 	// Apply hover row styles if enabled
@@ -52,7 +52,7 @@ export default function Table({ type = 'topHeader', borderAxis, children, size =
 		<div className={cn('w-full overflow-auto rounded-md border', containerClassName)}>
 			<ShadcnTable
 				className={cn(
-					'bg-white',
+					'bg-card',
 					sizeClasses[size] || sizeClasses.sm,
 					variantClasses[variant] || variantClasses.soft,
 					typeClasses,

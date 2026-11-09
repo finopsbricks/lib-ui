@@ -257,7 +257,7 @@ disappears. Seen on the txn docs page (headings invisible on white), and lib-ui 
 Fixed early (v0.6.2, user-reported): `primitives/data-table/data-table.jsx` table tint and
 pinned-cell backgrounds (`dark:` variants, light unchanged).
 
-lib-ui files to fix first: `components/Table.jsx`, `components/SettingsNavigation.jsx`,
+lib-ui files to fix first: `components/Table.jsx` (dark surfaces fixed in v0.8.3), `components/SettingsNavigation.jsx`,
 `components/StatsBarContainer.jsx`, `primitives/typography.jsx`, `primitives/timeline.jsx`,
 `primitives/data-table/data-table.jsx`, `primitives/badge.jsx`, `primitives/alert.jsx`,
 `components/CustomTab.jsx`.
