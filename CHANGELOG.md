@@ -15,6 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.8.1] - 2026-11-09
+
+### Added
+- `Logo` takes `bare` (drops the black border and padding, for a logo that is its
+  own rounded tile, like Timelog's) and `src` (the logo image, default
+  `/logo.svg`). Without them `Logo` renders as before.
+
+### Fixed
+- `Logo`'s image no longer has the alt text "Cashflowy" in every app. Beside the
+  app's name it is decorative (`alt=""`, the name labels the link); shown alone
+  (`offering=""`) its alt is "Home".
+
 ## [0.8.0] - 2026-11-09
 
 ### Changed

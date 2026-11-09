@@ -8,7 +8,15 @@
  * Examples: OnDesktopNavigation, OnMobileHeader, InAuthenticationPages
  */
 
+import { within, expect } from 'storybook/test';
 import Logo from './Logo';
+
+// A logo that is its own rounded tile (like Timelog's public/icon.svg), inlined because
+// lib-ui has no public folder.
+const tile_src = 'data:image/svg+xml,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#2f5d9a"/>'
+  + '<path d="M16 16L16 2.5A13.5 13.5 0 0 1 25.55 25.55Z" fill="#d4a514"/></svg>'
+);
 
 export default {
   title: 'components/Logo',
@@ -31,9 +39,17 @@ export default {
       control: { type: 'text' },
       description: 'URL to navigate to when logo is clicked.',
     },
-    class_name: {
+    className: {
       control: { type: 'text' },
       description: 'Additional CSS classes to apply to the logo container.',
+    },
+    src: {
+      control: { type: 'text' },
+      description: "Logo image path in the app's public folder. Defaults to /logo.svg.",
+    },
+    bare: {
+      control: { type: 'boolean' },
+      description: 'Drop the black frame (border and padding) for a logo that is its own tile.',
     },
   },
 };
@@ -165,7 +181,47 @@ export const InFooter = {
 };
 
 /**
- * USER JOURNEY STORY 6: Developer Interactive
+ * USER JOURNEY STORY 6: With A Logo That Is Its Own Tile
+ *
+ * When: The app's logo is a coloured rounded tile (Timelog), not the white logo the
+ *       frame was made for. `bare` drops the frame; `src` picks the small icon.
+ *
+ * User sees: The 32px tile with no black border or white padding around it.
+ */
+export const WithALogoThatIsItsOwnTile = {
+  args: {
+    offering: 'Timelog',
+    href: '/',
+    src: tile_src,
+    bare: true,
+  },
+  play: async ({ canvasElement }) => {
+    const img = canvasElement.querySelector('img');
+    const style = getComputedStyle(img);
+    await expect(style.borderTopWidth).toBe('0px');
+    await expect(style.paddingTop).toBe('0px');
+    await expect(img.getBoundingClientRect().width).toBe(32);
+    await expect(within(canvasElement).getByRole('link', { name: 'Timelog' })).toBeVisible();
+  },
+};
+
+/**
+ * The default keeps the frame: the FinOpsBricks apps' white logo depends on it.
+ */
+export const WithTheDefaultFrame = {
+  args: {
+    offering: 'Cashflowy',
+    href: '/',
+  },
+  play: async ({ canvasElement }) => {
+    const style = getComputedStyle(canvasElement.querySelector('img'));
+    await expect(style.borderTopWidth).toBe('2px');
+    await expect(style.paddingTop).toBe('2px');
+  },
+};
+
+/**
+ * USER JOURNEY STORY 7: Developer Interactive
  *
  * When: Developer is testing logo component in different contexts, sizes, and styling scenarios.
  *
