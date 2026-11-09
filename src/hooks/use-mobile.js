@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-const MOBILE_BREAKPOINT = 768;
+const MOBILE_BREAKPOINT = 640;
 
 export function useIsMobile() {
   // Start with false for consistent SSR - matches desktop layout

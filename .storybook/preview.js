@@ -1,6 +1,12 @@
 import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import '../src/styles/globals.css';
 
+// Each side of the phone/desktop line (Tailwind `sm`, 640px), for stories that switch layout there.
+const SM_EDGE_VIEWPORTS = {
+  below_sm: { name: 'Below sm (639)', styles: { width: '639px', height: '900px' }, type: 'tablet' },
+  at_sm: { name: 'At sm (640)', styles: { width: '640px', height: '900px' }, type: 'tablet' },
+};
+
 const preview = {
   parameters: {
     controls: {
@@ -16,7 +22,7 @@ const preview = {
       test: 'todo'
     },
     viewport: {
-      options: INITIAL_VIEWPORTS,
+      options: { ...INITIAL_VIEWPORTS, ...SM_EDGE_VIEWPORTS },
     },
     nextjs: {
       appDirectory: true,

@@ -29,12 +29,12 @@ export default function AdminHeader({ breadcrumbs = [] }) {
               } else {
                 return (
                   <React.Fragment key={index}>
-                    <BreadcrumbItem className="hidden md:block">
+                    <BreadcrumbItem className="hidden sm:block">
                       <BreadcrumbLink href={breadcrumb.href || "#"}>
                         {breadcrumb.text}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block" />
+                    <BreadcrumbSeparator className="hidden sm:block" />
                   </React.Fragment>
                 );
               }

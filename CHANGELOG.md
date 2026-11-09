@@ -15,6 +15,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.8.0] - 2026-11-09
+
+### Changed
+- **The line between the phone layout and the desktop layout moved from `md`
+  (768px) to Tailwind's `sm` (640px)**, as Tailwind ships it (no theme
+  override; `md` stays 768). Why: layout works in CSS pixels, and a window
+  filling half of a current laptop screen is 735–756px wide at default scaling
+  (e.g. 748 on a MacBook Pro 16 at Larger Text), so it got the phone layout.
+  From 640px up it now gets the desktop shell. Phones (360–440) and a third of
+  a laptop screen (490–576) keep the phone layout.
+- `useIsMobile()` now returns `true` below 640px (was 768), so `Sidebar`
+  switches between the phone sheet and the desktop rail at 640.
+- The shell components flip at `sm` with it: `Sidebar`/`SidebarInset`
+  (rail vs sheet, inset styles, larger touch hit areas, `showOnHover` menu
+  actions), `AppBreadcrumbs` (full trail vs back link), `AdminHeader`,
+  `SettingsContainer` and `SettingsNavigation` (navigation beside the content
+  vs a row above it).
+- `Input` and `Textarea` keep 16px text below 640px (so iOS Safari doesn't zoom
+  on focus) and use 14px from 640px up (`text-base sm:text-sm`, was
+  `md:text-sm`).
+- `Calendar` with `numberOfMonths={2}` shows the months side by side from 640px
+  (they need about 490px) and stacks them below.
+
+**What apps must do when upgrading:** between 640 and 767px an app now shows the
+desktop shell while its own pages may still stack. Move the app's own
+phone/desktop classes from `md:` / `max-md:` to `sm:` / `max-sm:`, and change
+any hand-written `min-width: 768px` / `max-width: 767px` media queries (e.g. a
+desktop shell lock or a phone `overflow: clip` in `globals.css`) and any
+`768`/`767` in JS to `640` / `639`. Keep `md:` only where a page wants a roomier
+second step (e.g. stat tiles four across). Check pages at 639 and 640 as well as
+390 and 1440.
+
 ## [0.7.0] - 2026-11-08
 
 ### Fixed

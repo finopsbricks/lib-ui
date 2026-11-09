@@ -308,3 +308,31 @@ export const WithSmallSizeVariant = {
     </div>
   ),
 };
+
+/**
+ * USER JOURNEY STORY: Typing on a phone, one pixel below sm (639)
+ *
+ * The text is 16px so iOS Safari doesn't zoom the page when the field is focused.
+ */
+export const TypingJustBelowSm = {
+  args: { placeholder: 'Organization name' },
+  globals: { viewport: { value: 'below_sm', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const input = within(canvasElement).getByPlaceholderText('Organization name');
+    await expect(getComputedStyle(input).fontSize).toBe('16px');
+  },
+};
+
+/**
+ * USER JOURNEY STORY: Typing at sm (640) and wider
+ *
+ * The desktop layout uses the 14px text size.
+ */
+export const TypingAtSm = {
+  args: { placeholder: 'Organization name' },
+  globals: { viewport: { value: 'at_sm', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const input = within(canvasElement).getByPlaceholderText('Organization name');
+    await expect(getComputedStyle(input).fontSize).toBe('14px');
+  },
+};

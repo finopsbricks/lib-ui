@@ -1,7 +1,7 @@
 /**
  * SettingsContainer Stories - User Journey Pattern
  *
- * A settings page: SettingsNavigation in columnOne, the page's content in columnTwo. From md the
+ * A settings page: SettingsNavigation in columnOne, the page's content in columnTwo. From sm (640px) the
  * navigation sits beside the content; on phones it is a row of links above it.
  */
 import { within, expect, waitFor } from 'storybook/test';
@@ -118,5 +118,30 @@ export const OnPhoneLastItem = {
       await expect(box.right).toBeLessThanOrEqual(nav.right);
     });
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 4: One pixel below sm (639) — still the phone layout: the navigation row above the content.
+ */
+export const JustBelowSm = {
+  globals: { viewport: { value: 'below_sm', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const { nav, content } = rects(canvasElement);
+    await expect(nav.bottom).toBeLessThanOrEqual(content.top);
+    await expect(nav.height).toBeLessThan(48);
+  },
+};
+
+/**
+ * USER JOURNEY STORY 5: At sm (640), e.g. half a laptop screen — the 192px navigation beside the content.
+ */
+export const AtSm = {
+  globals: { viewport: { value: 'at_sm', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const { nav, content } = rects(canvasElement);
+    await expect(nav.width).toBe(192);
+    await expect(nav.right).toBeLessThan(content.left);
+    await expect(Math.abs(nav.top - content.top)).toBeLessThan(2);
   },
 };

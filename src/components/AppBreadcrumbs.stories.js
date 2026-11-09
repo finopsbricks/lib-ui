@@ -137,3 +137,29 @@ export const OnPhoneTopLevel = {
     await expect(canvas.queryByTestId('breadcrumb-parent')).toBeNull();
   },
 };
+
+/**
+ * USER JOURNEY STORY 8: One pixel below sm (639) — still the phone bar: one link back to the parent.
+ */
+export const JustBelowSmDeepInApp = {
+  args: { breadcrumbs: THREAD_TRAIL },
+  globals: { viewport: { value: 'below_sm', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByTestId('breadcrumb-parent')).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Mail', hidden: true })).not.toBeVisible();
+  },
+};
+
+/**
+ * USER JOURNEY STORY 9: At sm (640), e.g. half a laptop screen — the whole trail, no back link.
+ */
+export const AtSmDeepInApp = {
+  args: { breadcrumbs: THREAD_TRAIL },
+  globals: { viewport: { value: 'at_sm', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Mail' })).toBeVisible();
+    await expect(canvas.getByTestId('breadcrumb-parent')).not.toBeVisible();
+  },
+};

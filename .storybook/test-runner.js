@@ -9,7 +9,8 @@ module.exports = {
   async preVisit(page, context) {
     const story_context = await getStoryContext(page, context);
     const viewport_key = story_context.storyGlobals?.viewport?.value;
-    const styles = viewport_key && INITIAL_VIEWPORTS[viewport_key]?.styles;
+    const viewports = { ...INITIAL_VIEWPORTS, ...story_context.parameters?.viewport?.options };
+    const styles = viewport_key && viewports[viewport_key]?.styles;
     await page.setViewportSize(styles
       ? { width: parseInt(styles.width), height: parseInt(styles.height) }
       : { width: 1366, height: 768 });

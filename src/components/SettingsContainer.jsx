@@ -2,7 +2,7 @@
 'use client';
 
 /**
- * Layout container for settings pages: the settings navigation beside the content from `md` up,
+ * Layout container for settings pages: the settings navigation beside the content from `sm` (640px) up,
  * stacked above it on phones.
  * @param {Object} props
  * @param {React.ReactNode} props.columnOne - Navigation (left column; on phones, the row above the content)
@@ -11,8 +11,8 @@
  */
 export default function SettingsContainer({ columnOne, columnTwo }) {
     return (
-        <div className="flex flex-col gap-4 pt-2 md:flex-row">
-            <div className="min-w-0 md:flex-shrink-0">
+        <div className="flex flex-col gap-4 pt-2 sm:flex-row">
+            <div className="min-w-0 sm:flex-shrink-0">
                 {columnOne}
             </div>
             <div className="min-w-0 flex-1 max-w-4xl">
