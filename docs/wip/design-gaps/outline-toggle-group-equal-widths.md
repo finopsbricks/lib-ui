@@ -1,6 +1,7 @@
 # OutlineToggleGroup gives every segment the same width
 
 ## Status: NOT STARTED
+## Priority: P3: long segment labels run into the edge; cosmetic
 
 Segments with an icon and a longer label run into the edge. Found while adding live examples to design-standards (2026-11-07).
 

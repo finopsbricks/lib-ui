@@ -1,6 +1,7 @@
 # Dialog content doesn't scroll when it is long
 
 ## Status: NOT STARTED
+## Priority: P3: a long dialog can push its buttons off screen on phones; no case seen in an app yet
 
 `DialogContent` has no maximum height. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

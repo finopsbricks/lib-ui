@@ -1,6 +1,7 @@
 # Alert warning, success and destructive text fails contrast
 
 ## Status: NOT STARTED
+## Priority: P3: warning, success and error alert text is about 3.1-4:1, below AA but readable
 
 The coloured text of three Alert variants is under 4.5:1 on its band. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

@@ -1,6 +1,7 @@
 # CustomTab hard-codes `bg-white`
 
 ## Status: COMPLETE (v0.8.2, design-standards pin pending)
+## Priority: P4: fixed in v0.8.2; only the design-standards pin and page update are left
 
 Page tabs stay white in dark mode. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour. Hit in production on the statements account detail page (2026-11-09): the white panel made the active tab, the count badges and everything token-coloured inside the panel ("Select Period", stats labels) invisible.
 

@@ -1,6 +1,7 @@
 # CustomTab's `variant` does nothing, and apps pass props it ignores
 
 ## Status: NOT STARTED
+## Priority: P4: ignored props mislead callers but cause no visible bug today
 
 CustomTab's props don't match how it is documented and used. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

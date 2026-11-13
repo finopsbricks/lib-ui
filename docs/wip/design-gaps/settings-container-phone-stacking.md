@@ -1,6 +1,7 @@
 # SettingsContainer doesn't stack on phones
 
 ## Status: NOT STARTED
+## Priority: P4: stacking shipped in v0.7.0; only the design-standards pages are left
 
 The settings navigation and content stay side by side at every width. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

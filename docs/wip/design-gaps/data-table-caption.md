@@ -1,6 +1,7 @@
 # DataTable can't be given a name or caption
 
 ## Status: NOT STARTED
+## Priority: P3: tables can't be named, so screen readers can't tell two tables apart
 
 The rendered `<table>` has no way to receive a caption or `aria-label`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

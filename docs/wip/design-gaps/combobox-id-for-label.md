@@ -1,6 +1,7 @@
 # Combobox can't be linked to a label
 
 ## Status: NOT STARTED
+## Priority: P3: a Combobox can't be tied to its label, so screen readers get no field name
 
 `Combobox` takes no `id`, so a `Label` can't point at it. Found while adding live examples to design-standards (2026-11-07).
 

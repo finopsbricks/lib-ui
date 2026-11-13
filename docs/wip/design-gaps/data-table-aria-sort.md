@@ -1,6 +1,7 @@
 # DataTable doesn't expose sort order
 
 ## Status: NOT STARTED
+## Priority: P3: screen reader users can't tell which column a table is sorted by
 
 Sorted columns show an arrow but set no `aria-sort`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

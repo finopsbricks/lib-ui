@@ -7,6 +7,7 @@ Migrate engine.fobrix.com from local `@/components/ui/` to `@fob/lib-ui` package
 **Goal**: Delete all duplicate UI components from engine, use centralized @fob/lib-ui library.
 
 **Status**: ✅ **COMPLETE** (2026-01-24)
+## Priority: P4: migration is complete; nothing left that affects users
 
 ---
 

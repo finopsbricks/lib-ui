@@ -1,5 +1,8 @@
 # WIP: Component Migration Plan
 
+## Status: IN PROGRESS (~60%)
+## Priority: P4: remaining batch only removes duplicate components from apps; no user is affected
+
 ## Overview
 
 This document tracks the migration of shared components from `engine.fobrix.com` - /Users/alex/ec2code/cashflowy/engine.fobrix.com and `statements.finopsbricks.com` - /Users/alex/ec2code/finopsbricks/apps/statements.finopsbricks.com into this centralized `@fob/lib-ui` library.

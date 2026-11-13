@@ -1,6 +1,7 @@
 # Sidebar and settings navigation don't mark the current page
 
 ## Status: NOT STARTED
+## Priority: P3: screen readers aren't told the current page in sidebars and settings nav
 
 `NavItem` and `SettingsNavigation` show the current item visually but never set `aria-current`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

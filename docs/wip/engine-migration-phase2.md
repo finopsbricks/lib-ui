@@ -1,5 +1,8 @@
 # WIP: Engine Migration Phase 2 - Batch 2 Components
 
+## Status: NOT STARTED
+## Priority: P4: nothing breaks while engine keeps its own copies of these components
+
 ## Overview
 
 Migrate engine.fobrix.com to use `@fob/lib-ui` Batch 2 components (feature components).

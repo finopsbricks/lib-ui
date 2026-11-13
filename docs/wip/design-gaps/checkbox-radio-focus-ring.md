@@ -1,6 +1,7 @@
 # Checkbox and Radio use a different focus ring
 
 ## Status: NOT STARTED
+## Priority: P3: checkbox and radio focus ring looks different from other controls; cosmetic
 
 Their focus ring is 2px `ring-ring` with an offset; every other control is 3px `ring-ring/50`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

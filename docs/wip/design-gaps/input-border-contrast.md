@@ -1,6 +1,7 @@
 # `border-input` is too faint to show a control's edge
 
 ## Status: NOT STARTED
+## Priority: P3: input and switch edges are 1.27:1, hard to see for low-vision users
 
 Input, Textarea and Select borders, and the Switch off track, are under the 3:1 non-text minimum. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

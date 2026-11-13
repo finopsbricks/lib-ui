@@ -1,6 +1,7 @@
 # Badge, Alert and Timeline status colours are raw palette classes
 
 ## Status: NOT STARTED
+## Priority: P3: status badges stay light pills in dark mode and skip the status tokens
 
 Status colours in three components bypass the tokens, so they skip the theme and v0.7.0's status tokens. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

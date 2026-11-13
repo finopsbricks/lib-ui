@@ -1,6 +1,7 @@
 # CustomTab's tab list has no accessible name
 
 ## Status: NOT STARTED
+## Priority: P3: screen readers announce page tabs as an unnamed tab list
 
 Page tabs are announced as an unnamed tab list. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

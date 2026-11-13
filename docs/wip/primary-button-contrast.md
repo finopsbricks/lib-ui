@@ -1,6 +1,7 @@
 # Primary Button Contrast Below WCAG AA
 
 ## Status: NOT STARTED
+## Priority: P3: primary buttons in every app are 3.45:1, below AA, but still readable
 
 Text on the primary button (`--primary-foreground` on `--primary`) measures **3.45:1**, below the
 WCAG AA minimum of 4.5:1 for normal text. Every app's primary buttons ("Create Tag", "Connect Google

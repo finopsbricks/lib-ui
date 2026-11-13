@@ -1,6 +1,7 @@
 # Pagination has no navigation landmark or current-page marker
 
 ## Status: NOT STARTED
+## Priority: P3: pagination isn't a landmark and has no current-page marker for screen readers
 
 `Pagination` renders bare buttons and text, with no `nav` and no `aria-current`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

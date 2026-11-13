@@ -1,6 +1,7 @@
 # `text-primary-foreground` on `bg-primary` fails text contrast
 
 ## Status: NOT STARTED
+## Priority: P3: primary button, badge and tooltip text is 3.46:1, below AA but readable
 
 The label colour on primary surfaces is under the 4.5:1 text minimum in light mode. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

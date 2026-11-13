@@ -1,6 +1,7 @@
 # ExportConfirmDialog's stories pass the wrong props, and its copy is title case
 
 ## Status: NOT STARTED
+## Priority: P3: export dialog labels are title case and its stories show no counts; polish
 
 The export dialog's stories show no counts, and its labels break our sentence-case rule. Found while adding live examples to design-standards (2026-11-07).
 

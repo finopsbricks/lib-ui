@@ -1,6 +1,7 @@
 # DataTable can't start sorted
 
 ## Status: NOT STARTED
+## Priority: P3: tables can't open sorted; pages pre-sort rows as a workaround, with no arrow shown
 
 `initialState.sorting` is ignored, so a table can't open with a default sort. Found while adding live examples to design-standards (2026-11-07).
 

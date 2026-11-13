@@ -1,6 +1,7 @@
 # OutlineToggleGroup can't be given an accessible name
 
 ## Status: NOT STARTED
+## Priority: P3: view toggles are announced with no group name
 
 A segmented control is announced with no name for the group. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

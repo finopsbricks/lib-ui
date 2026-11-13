@@ -1,6 +1,7 @@
 # MultiSelect's button loses the field's name
 
 ## Status: NOT STARTED
+## Priority: P3: screen readers hear MultiSelect's value but not which filter it is
 
 The trigger's `aria-label` is its value, so screen readers don't hear which field it is. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 
