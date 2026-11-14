@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: breadcrumb clicks reload the whole page; slower, but navigation works
+## Bet: finopsbricks
 
 `BreadcrumbLink` renders a plain `<a>`, not `next/link`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: MultiSelect is 4px taller than inputs beside it; cosmetic
+## Bet: finopsbricks
 
 The `default` size is 40px; every other input is 36px. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

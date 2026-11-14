@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P4: no app uses RadioGroup today
+## Bet: finopsbricks
 
 `RadioGroup` and `RadioGroupItem` are `forwardRef` components with no JSDoc props type. Found while adding live examples to design-standards (2026-11-07).
 

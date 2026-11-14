@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: the sidebar logo nearly vanishes in dark mode, which users must opt in to
+## Bet: finopsbricks
 
 The app logo's mark is drawn in black. Found while adding live examples to design-standards (2026-11-07).
 

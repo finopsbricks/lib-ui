@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P2: statements' stats bars round money to whole rupees and colour outflows as warnings
+## Bet: finopsbricks
 
 Money in the stats bar loses its paise, and negative values turn amber. Found while adding live examples to design-standards (2026-11-07).
 

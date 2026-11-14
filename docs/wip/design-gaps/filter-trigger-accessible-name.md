@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: filter buttons in four apps have no accessible name for screen readers
+## Bet: finopsbricks
 
 The filter panel's fold button and phone filter button are icon-only with no name. Found while writing the design-standards filter panel page (2026-11-06).
 

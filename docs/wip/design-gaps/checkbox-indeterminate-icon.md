@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: statements' select-all checkbox looks fully checked when only some rows are selected
+## Bet: finopsbricks
 
 An indeterminate checkbox looks checked. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: public navbars are unreadable only in dark mode, which users must opt in to
+## Bet: finopsbricks
 
 Move the public navbar (the bar on landing, pricing and docs pages) into lib-ui as one
 `PublicNavbar` component built on theme tokens, then replace every app's copy with it. Today

@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: MultiSelect's panel is narrower than its button and cuts long options short
+## Bet: finopsbricks
 
 The option panel doesn't match the trigger's width. Found while adding live examples to design-standards (2026-11-07).
 

@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: tables can't be named, so screen readers can't tell two tables apart
+## Bet: finopsbricks
 
 The rendered `<table>` has no way to receive a caption or `aria-label`. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

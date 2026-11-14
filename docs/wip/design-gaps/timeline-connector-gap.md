@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: timeline lines stop short of the next dot; cosmetic
+## Bet: finopsbricks
 
 The line between timeline items doesn't reach the next item. Found while adding live examples to design-standards (2026-11-07).
 

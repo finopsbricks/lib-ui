@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: app pages have no h1, so screen reader heading navigation starts at h3
+## Bet: finopsbricks
 
 PageHeader renders the title at heading level 3, so app pages have no `h1` and their outline starts at 3. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

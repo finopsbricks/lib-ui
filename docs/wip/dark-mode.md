@@ -2,6 +2,7 @@
 
 ## Status: IN PROGRESS (~85%) — Phases 1–6 done; Phase 7 (hardcoded colors) deliberately deferred
 ## Priority: P3: dark mode is opt-in and light stays the default; only the deferred hard-coded-colour phase is left
+## Bet: finopsbricks
 
 Add a user-selectable theme (Light, Dark, System) to every FinOpsBricks app. lib-ui owns the
 mechanism: a theme provider, a theme picker, and the light and dark token values. Apps wire it in

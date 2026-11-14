@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: screen readers announce progress bars as indeterminate
+## Bet: finopsbricks
 
 `Progress` draws the fill from `value` but never passes it to the Radix root. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

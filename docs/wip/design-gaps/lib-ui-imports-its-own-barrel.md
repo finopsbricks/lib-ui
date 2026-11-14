@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: design-standards can't import FilterTrigger without failing typecheck; apps unaffected
+## Bet: finopsbricks
 
 Four lib-ui components import from `'@fob/lib-ui'` (the package's own index) instead of relative paths. Found while adding live examples to design-standards (2026-11-06).
 

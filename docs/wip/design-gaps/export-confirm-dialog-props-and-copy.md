@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: export dialog labels are title case and its stories show no counts; polish
+## Bet: finopsbricks
 
 The export dialog's stories show no counts, and its labels break our sentence-case rule. Found while adding live examples to design-standards (2026-11-07).
 

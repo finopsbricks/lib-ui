@@ -2,6 +2,7 @@
 
 ## Status: IN PROGRESS (~60%)
 ## Priority: P2: fixed in lib-ui v0.7.0, but settings pages are still clipped on phones in apps not yet upgraded
+## Bet: finopsbricks
 
 `SettingsContainer` keeps its 192px settings nav beside the content at every width. On a 390px phone
 that leaves about 158px for the page, and settings pages are clipped and unusable — in every app

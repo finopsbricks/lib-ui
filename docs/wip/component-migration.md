@@ -2,6 +2,7 @@
 
 ## Status: IN PROGRESS (~60%)
 ## Priority: P4: remaining batch only removes duplicate components from apps; no user is affected
+## Bet: finopsbricks
 
 ## Overview
 

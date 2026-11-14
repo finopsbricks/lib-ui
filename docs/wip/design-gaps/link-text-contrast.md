@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: text-primary links are 3.76:1 on white, below AA but readable
+## Bet: finopsbricks
 
 Links in `text-primary` are under 4.5:1 on white. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

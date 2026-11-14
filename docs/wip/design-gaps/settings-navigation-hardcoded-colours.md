@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: settings nav stays white in dark mode, which users must opt in to
+## Bet: finopsbricks
 
 The settings side navigation ignores the theme. Found while revising the design-standards component pages (2026-11-06), which describe today's behaviour.
 

@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P3: @ts-check consumers get false type errors and must pass defaults by hand
+## Bet: finopsbricks
 
 Their JSDoc marks props with defaults as required, which breaks consumer typecheck. Found while adding live examples to design-standards (2026-11-07).
 

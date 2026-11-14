@@ -2,6 +2,7 @@
 
 ## Status: NOT STARTED
 ## Priority: P4: no app uses a submenu trigger today; cosmetic
+## Bet: finopsbricks
 
 A submenu trigger's icon is larger and darker than the icons on the items around it. Found while adding live examples to design-standards (2026-11-07).
 
