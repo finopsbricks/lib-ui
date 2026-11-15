@@ -76,7 +76,6 @@ src/umami/
 
 ### Phase 1: Check the two open questions ✅
 - [x] Read Umami 3.2.0's tracker and recorder source (answers above)
-- [ ] Add the recorder-URL limitation to the standard
 
 ### Phase 2: Client module ❌
 - [ ] `src/umami/umamiBeforeSend.js`, `UmamiAnalytics.jsx`, `UmamiIdentify.jsx`, `autocapture.js`, `index.js`
@@ -91,6 +90,7 @@ src/umami/
 ### Phase 4: Remove Amplitude and release ❌
 - [ ] Delete the Amplitude files, export and packages; `grep -ri amplitude src package.json README.md CLAUDE.md` finds nothing
 - [ ] `exports` gains `./umami` and `./umami/server`
+- [ ] Standard: add the recorder-URL limitation
 - [ ] `CHANGELOG.md` 0.9.0 with "What apps must do"; version `0.9.0` in `package.json`
 - [ ] `npm run storybook:test:ci` and the new tests pass
 - [ ] Commit, tag `v0.9.0`, push with the tag
