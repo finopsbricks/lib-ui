@@ -62,20 +62,21 @@ src/umami/
   replace `AmplitudeProvider` with `<UmamiAnalytics />` and `AmplitudeUserIdentifier` with
   `<UmamiIdentify userId orgId />`, and set the two env vars.
 
-## Open Questions (check on `umami.finopsbricks.com`, v3.2.0, before Phase 2)
+## Answered From Umami 3.2.0's Source (2026-11-16)
 
-- Does the recorder call the `data-before-send` handler too? If not, replay URLs carry ids, and
-  the recorder needs its own way to strip them (or the gap goes in the standard as a known
-  limitation).
-- Does `/api/send` accept `id` as the distinct id in this version, so server events join the
-  user's browser session? If not, send `user_id` in `data` instead.
+- **The recorder does not call `data-before-send`.** Only the tracker does
+  (`src/tracker/index.js:31`); the recorder sends `location.href` as is
+  (`src/recorder/index.js:509,558`). So replay URLs carry record UUIDs. Judged acceptable: they
+  are opaque ids in our own store, and pageview and event URLs are still stripped. Add it to the
+  standard as a known limitation.
+- **`/api/send` accepts `id` as the distinct id** (`src/app/api/send/route.ts:50`, stored as
+  `distinctId`), so server events can carry the user id and join that user's sessions.
 
 ## Implementation Phases
 
-### Phase 1: Check the two open questions ❌
-- [ ] Read Umami 3.2.0's tracker and recorder source (or test against the instance) for `data-before-send` in the recorder
-- [ ] Send one test event to `/api/send` with `id` and see it in the dashboard; delete the test website afterwards
-- [ ] Update this WIP and the standard with the answers
+### Phase 1: Check the two open questions ✅
+- [x] Read Umami 3.2.0's tracker and recorder source (answers above)
+- [ ] Add the recorder-URL limitation to the standard
 
 ### Phase 2: Client module ❌
 - [ ] `src/umami/umamiBeforeSend.js`, `UmamiAnalytics.jsx`, `UmamiIdentify.jsx`, `autocapture.js`, `index.js`
