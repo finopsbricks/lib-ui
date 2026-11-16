@@ -1,6 +1,6 @@
 # Standard tables (T0–T2): build in lib-ui, roll out to every app
 
-## Status: IN PROGRESS (~20%): Phase 1 built (lib-ui 0.9.0, not tagged); Phase 2 started; waiting on Alex's review
+## Status: IN PROGRESS (~35%): lib-ui 0.9.0 tagged; Phase 2 built in statements (2026-11-16), shipping and Alex's production check next
 ## Priority: P2: most list tables can't be sorted (e.g. statements /accounts); sort and pagination each have 5+ implementations
 ## Bet: finopsbricks
 
@@ -222,12 +222,28 @@ Built as 0.9.0 on main, not tagged (2026-11-16). API as built:
 
 ### Phase 2: statements (proving ground) 🔄
 - [x] Point statements at the lib-ui build; accounts page sortable (the original ask)
-- [x] One T2 table (statements list: fixes the unreachable-after-100 bug)
-- [ ] The rest of the statements inventory
+- [x] One T2 table (statements list: fixes the unreachable-after-100 bug), plus an Uploaded column (default `created_at DESC`, arrow shown)
+- [x] The rest of the statements inventory:
+  - [x] Rules: T1, default priority, Created column, Sort By select removed
+  - [x] Activity: T2 (Time sorts on the server)
+  - [x] Category and Entity detail: T1, 500 cap removed
+  - [x] Statement tabs: Extracted (default statement order), Background jobs (numeric Duration)
+  - [x] Overview and Upload status: T1 on `DataTable`
+  - [x] Admin orgs, parsers, statements: standard header; admin statements cap removed (1,598 rows, loaded without the JSON columns)
+  - [x] Admin jobs: T2 (was the 1000 cap); counts from GROUP BY
+  - [x] Parser detail: mock results sort numerically; raw grids T0
+  - [x] Staff queue: T2, no double pagination
+  - [x] Supported banks: `DataTable` T1
+  - [x] Settings members and API keys: T1
+  - [x] Transactions: Sort By select removed (TransactionsTable unchanged; localStorage stays until T3)
+  - [x] Reports (T4 later): Total sorts numerically; period columns opt out
+  - [x] Audit of every `DataTable` that became sortable by default (object, formatted or mixed accessors fixed or opted out)
+- [x] Remove dead code: `rules/_components/RulesTable.jsx`, `statements/_components/UploadTable.jsx`, `statements/[s_id]/_components/DataGrid.jsx`
+- [x] Floating buttons no longer cover the pager: `FoldFilterContainer` leaves room below them (pb-20 phone, pb-16 desktop)
+- [x] Release lib-ui 0.9.0 (tagged `3b470ab`), pin statements to the tag
+- [ ] Ship statements; Alex checks it in production
 
-Testing before the tag: statements still pins `#v0.8.3`. For local runs, lib-ui's `src/` and `package.json` were copied over `node_modules/@fob/lib-ui` (`rsync -a --delete <lib-ui>/src/ node_modules/@fob/lib-ui/src/`); `npm ci` undoes it. Nothing in statements' `package.json` or lockfile changed. Releasing = tag `v0.9.0` in lib-ui, push, then bump the pin to `github:finopsbricks/lib-ui#v0.9.0` and `npm install` in statements (last item below).
-- [ ] Remove dead code: `rules/_components/RulesTable.jsx`, `statements/_components/UploadTable.jsx`, `statements/[s_id]/_components/DataGrid.jsx`
-- [ ] Release lib-ui, pin statements to the tag, ship statements; Alex checks it in production
+Server sort helper in statements: `src/utils/filter/sortOrder.js` (`sortOrder`, `parsePage`), used by `statementOrder`, activity, admin jobs and the staff queue.
 
 ### Phase 3: Standard written down ❌
 - [ ] design-standards `data-table.mdx`: layers, the variant table, the choosing rule, sortable by default, server mode, the click cycle, the URL-only persistence rule
@@ -248,13 +264,12 @@ Testing before the tag: statements still pins `#v0.8.3`. For local runs, lib-ui'
 UI work in Phases 2–5 goes to the `ux-designer` agent. Each app ships through the `ship` skill. Create a short per-app WIP when an app's turn starts, linking back here.
 
 ## Proposals (noticed in Phases 1–2, not done)
-- **Upload date isn't a column on `/statements`.** The default order (newest upload first) can't show an arrow, and with the sort select gone there's no way to sort oldest-upload-first. Options: an "Uploaded" column (sort key `created_at`), or accept it.
-- **Cards view has no sort control** on `/statements` (it keeps whatever sort the URL has). T3 phone cards will need a sort control too.
-- **Floating buttons cover the pager's Next**: the Assistant button (1440) and the filter button (390) sit over the bottom-right of every list footer. Already true of the old client footer. design-standards Responsive › iOS safe areas: "Floating elements leave room below them".
-- **Statements page size is 100** with no client footer now, so 100 rows show at once (was 20 a client page). The DataTable page says 30 is the default.
-- **`DateHeader` isn't exported from the barrel**: `export *` skips its default export.
-- **Old `?sort_by=ASC` links** (the removed select) now open newest-first instead of oldest-first; nothing crashes.
-- **Other statements T2 candidates** use the old `Pagination` props unchanged (activity, staff queue); their layout changes to the new one (status left, buttons right).
+- **Cards view has no sort control** on `/statements` (it keeps whatever sort the URL has). Decided 2026-11-16: leave for T3, whose phone cards need one too.
+- **Old sort links:** `?sort_by=ASC` on statements and transactions, and `?sort_by=created_desc` etc. on rules, now open in the default order instead of the old one; nothing crashes.
+- **Category/entity detail loads every matching transaction.** Fine at today's sizes; an "Uncategorized" bucket in a large org could be thousands of rows. If one gets slow, that view becomes T2.
+- **`FoldFilterContainer` switches at 767px (`md`)**, not lib-ui's `sm` (640) line from 0.8.0. Not changed here.
+- **The staff queue page throws `useSidebar must be used within a SidebarProvider`** in the real app. The T2 changes don't touch its breadcrumbs or sidebar, but the error wasn't checked against the pre-change code.
+- **Pagination on phone cards** should be "Show N more" per design-standards Responsive; the statements cards view uses Previous/Next for now.
 
 ## Related Files
 - `src/primitives/data-table/data-table.jsx`, `SortableHeader.jsx`
