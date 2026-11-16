@@ -55,6 +55,8 @@ server paging are built once in `DataTable` and `Pagination`.
   `Button asChild`. Previous to page 1 drops `page` from the URL.
 
 ### Fixed
+- `DateHeader` is exported from the barrel (`export *` skipped its default
+  export, so `import { DateHeader } from '@fob/lib-ui'` was undefined).
 - `initialState.sorting` is honoured: a table opens sorted, with the arrow on
   its column (it was ignored; `design-gaps/data-table-default-sort.md`).
 - `Pagination` with `pageCount` 0 left Next enabled; Next is now disabled

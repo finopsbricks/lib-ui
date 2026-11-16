@@ -52,7 +52,7 @@ export * from './primitives/typography';
 
 // Data Table
 export * from './primitives/data-table/data-table';
-export * from './primitives/data-table/DateHeader';
+export { default as DateHeader } from './primitives/data-table/DateHeader';
 export { default as SortableHeader } from './primitives/data-table/SortableHeader';
 
 // Components (Batch 2)
