@@ -1,6 +1,6 @@
 # Standard tables (T0–T2): build in lib-ui, roll out to every app
 
-## Status: NOT STARTED
+## Status: IN PROGRESS (~20%): Phase 1 built (lib-ui 0.9.0, not tagged); Phase 2 started; waiting on Alex's review
 ## Priority: P2: most list tables can't be sorted (e.g. statements /accounts); sort and pagination each have 5+ implementations
 ## Bet: finopsbricks
 
@@ -65,7 +65,7 @@ The variant is chosen by **where the rows live**. Everything else is a prop.
 |---|---|---|---|---|---|
 | **T0 Static** | `Table` (`components/Table`) | few, fixed | none, on purpose | none | n/a |
 | **T1 Client** | `DataTable` | all in the browser | client, in memory | built-in footer, or `hidePagination` for short tables | no |
-| **T2 Server** | `DataTable mode="server"` (name TBD) | one page from the server | URL `sort_by` / `sort_order` | lib-ui `Pagination` from URL `page` | yes (the URL) |
+| **T2 Server** | `DataTable mode="server"` | one page from the server | URL `sort_by` / `sort_order` | lib-ui `Pagination` from URL `page` | yes (the URL) |
 
 **Rule: a sort survives a reload only when it's in the URL.** That is always true for T2. For T1 it holds only when the table is a T3 Workbench, which keeps its state in the URL ([[table-variants-workbench-report-tree]]). Nothing is persisted in localStorage. The localStorage sort in `TransactionsTable` (`useTableState`) moves to the URL as part of T3.
 
@@ -208,15 +208,24 @@ Neither depends on lib-ui yet. Both already have Tailwind v4, so adding `@fob/li
 
 Order (decided 2026-11-16): build in lib-ui, prove it on statements, then roll out. The design-standards pages are written once statements has validated the API (Phase 4), so they describe tested behaviour.
 
-### Phase 1: lib-ui ❌
-- [ ] `DataTable`: fixes 1–5 and 7–8 above
-- [ ] `Pagination`: fix 6 (absorb ledger `Pager`, `hasMore`, a11y)
-- [ ] Stories at phone and desktop widths with play functions (`regression-stories`)
-- [ ] Close `design-gaps/data-table-default-sort.md`, `data-table-aria-sort.md`, `pagination-landmark-and-current.md`
+### Phase 1: lib-ui ✅
+- [x] `DataTable`: fixes 1–5 and 7–8 above (7 is a rule for apps: nothing to build in lib-ui)
+- [x] `Pagination`: fix 6 (absorb ledger `Pager`, `hasMore`, a11y)
+- [x] Stories at phone and desktop widths with play functions (`regression-stories`)
+- [x] Close `design-gaps/data-table-default-sort.md`, `data-table-aria-sort.md`, `pagination-landmark-and-current.md` (deleted; their design-standards updates are Phase 3 here)
 
-### Phase 2: statements (proving ground) ❌
-- [ ] Point statements at the lib-ui build; accounts page sortable (the original ask)
-- [ ] One T2 table (statements list: fixes the unreachable-after-100 bug), then the rest of the statements inventory
+Built as 0.9.0 on main, not tagged (2026-11-16). API as built:
+- Sortable by default: a column with an accessor sorts unless `enableSorting: false`; a string `header` gets `SortableHeader` (right-aligned when `meta.isNumeric` or `text-right` in `meta.headerClassName`).
+- `initialState.sorting` is the default order, in both modes. Cycle: asc → desc → default; clicking the default column when it shows the default starts its cycle at asc.
+- `mode="server"`, `total` or `hasMore`, `pageSize`. The sort is the URL's `sort_by` = column id and `sort_order`; the click pushes with `router.push(…, { scroll: false })` and drops `page`. A `sort_by` that isn't a sortable column is ignored. Columns the server's whitelist doesn't cover set `enableSorting: false`.
+- `Pagination`: `page` | `currentPage`, `total` + `pageSize` | `hasMore` | `pageCount`.
+
+### Phase 2: statements (proving ground) 🔄
+- [x] Point statements at the lib-ui build; accounts page sortable (the original ask)
+- [x] One T2 table (statements list: fixes the unreachable-after-100 bug)
+- [ ] The rest of the statements inventory
+
+Testing before the tag: statements still pins `#v0.8.3`. For local runs, lib-ui's `src/` and `package.json` were copied over `node_modules/@fob/lib-ui` (`rsync -a --delete <lib-ui>/src/ node_modules/@fob/lib-ui/src/`); `npm ci` undoes it. Nothing in statements' `package.json` or lockfile changed. Releasing = tag `v0.9.0` in lib-ui, push, then bump the pin to `github:finopsbricks/lib-ui#v0.9.0` and `npm install` in statements (last item below).
 - [ ] Remove dead code: `rules/_components/RulesTable.jsx`, `statements/_components/UploadTable.jsx`, `statements/[s_id]/_components/DataGrid.jsx`
 - [ ] Release lib-ui, pin statements to the tag, ship statements; Alex checks it in production
 
@@ -237,6 +246,15 @@ Order (decided 2026-11-16): build in lib-ui, prove it on statements, then roll o
 - [ ] fob-watch, control-room (add lib-ui first)
 
 UI work in Phases 2–5 goes to the `ux-designer` agent. Each app ships through the `ship` skill. Create a short per-app WIP when an app's turn starts, linking back here.
+
+## Proposals (noticed in Phases 1–2, not done)
+- **Upload date isn't a column on `/statements`.** The default order (newest upload first) can't show an arrow, and with the sort select gone there's no way to sort oldest-upload-first. Options: an "Uploaded" column (sort key `created_at`), or accept it.
+- **Cards view has no sort control** on `/statements` (it keeps whatever sort the URL has). T3 phone cards will need a sort control too.
+- **Floating buttons cover the pager's Next**: the Assistant button (1440) and the filter button (390) sit over the bottom-right of every list footer. Already true of the old client footer. design-standards Responsive › iOS safe areas: "Floating elements leave room below them".
+- **Statements page size is 100** with no client footer now, so 100 rows show at once (was 20 a client page). The DataTable page says 30 is the default.
+- **`DateHeader` isn't exported from the barrel**: `export *` skips its default export.
+- **Old `?sort_by=ASC` links** (the removed select) now open newest-first instead of oldest-first; nothing crashes.
+- **Other statements T2 candidates** use the old `Pagination` props unchanged (activity, staff queue); their layout changes to the new one (status left, buttons right).
 
 ## Related Files
 - `src/primitives/data-table/data-table.jsx`, `SortableHeader.jsx`
