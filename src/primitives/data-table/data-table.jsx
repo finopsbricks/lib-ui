@@ -368,8 +368,7 @@ function DataTableView({
                     const can_sort = !header.isPlaceholder && header.column.getCanSort()
                     const sorted = header.column.getIsSorted()
                     const header_def = header.column.columnDef.header
-                    // @ts-ignore - Custom meta property
-                    const meta = header.column.columnDef.meta
+                    const meta = /** @type {{ isNumeric?: boolean, headerClassName?: string } | undefined} */ (header.column.columnDef.meta)
                     const align_right = meta?.isNumeric || /\btext-right\b/.test(meta?.headerClassName || "")
                     return (
                       <TableHead

@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.9.1] - 2026-11-16
+
+### Fixed
+
+- `DataTable`: column `meta` is typed for `isNumeric`/`headerClassName`, so apps that typecheck `node_modules` (statements) pass `tsc` again.
+
 ## [0.9.0] - 2026-11-16
 
 Standard tables, phase 1 (`docs/wip/standard-tables-rollout.md`): sort and
