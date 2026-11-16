@@ -30,7 +30,18 @@ export * from './primitives/slider';
 export * from './primitives/sonner';
 export * from './primitives/stack';
 export * from './primitives/switch';
-export * from './primitives/table';
+// `Table` from the barrel is the components/Table wrapper (below); the
+// primitive is at '@fob/lib-ui/primitives/table'.
+export {
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+  tableVariants,
+} from './primitives/table';
 export * from './primitives/tabs';
 export * from './primitives/textarea';
 export * from './primitives/timeline';
@@ -42,6 +53,7 @@ export * from './primitives/typography';
 // Data Table
 export * from './primitives/data-table/data-table';
 export * from './primitives/data-table/DateHeader';
+export { default as SortableHeader } from './primitives/data-table/SortableHeader';
 
 // Components (Batch 2)
 export { default as Markdown } from './components/Markdown';

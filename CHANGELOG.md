@@ -15,6 +15,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.9.0] - 2026-11-16
+
+Standard tables, phase 1 (`docs/wip/standard-tables-rollout.md`): sort and
+server paging are built once in `DataTable` and `Pagination`.
+
+### Added
+- **Columns sort by default.** Every `DataTable` column with an accessor is
+  sortable unless it sets `enableSorting: false`; a column with a string
+  `header` renders `SortableHeader` by itself (right-aligned when its
+  `meta.isNumeric` is set or its `meta.headerClassName` has `text-right`). A
+  column whose accessor returns an object needs a scalar accessor or a
+  `sortingFn`, or `enableSorting: false`.
+- **`DataTable mode="server"`** for a list paged on the server (T2): the sort
+  is the URL's `sort_by` (a column id) and `sort_order` (`ASC` | `DESC`), a
+  header click pushes them and drops `page`, rows aren't re-sorted or sliced
+  in the browser, and `Pagination` renders below from `total` (or `hasMore`)
+  and `pageSize`. A `sort_by` that isn't a sortable column is ignored. The
+  server orders by its own whitelist of the same ids.
+- `aria-sort` on every sortable `<th>` (`ascending`, `descending`, `none`).
+- `Pagination` takes `total` + `pageSize` ("Page x of y · N rows") or
+  `hasMore` ("Page x", for queries that can't count), and `page`. It is a
+  `<nav aria-label="Pagination">`, the status carries `aria-current="page"`,
+  and its links keep every other search param.
+- `SortableHeader` is exported from the barrel.
+- Storybook: a `desktop` (1440) viewport option; stories
+  `primitives/data-table/Sorting and server mode`, the new `Pagination`
+  stories, and `SortableHeader/WhenClickingSortedColumnAThirdTime`.
+
+### Changed
+- **Sort click cycle is asc → desc → the default order** (was asc → desc →
+  asc). The default is `initialState.sorting`, or the rows' own order. This
+  applies to explicit `SortableHeader`s too; with controlled `state.sorting`
+  the third click hands your `onSortingChange` an empty sort.
+- `Pagination` layout: the status on the left, Previous and Next on the
+  right (was Previous · status · Next). The `{ pageCount, currentPage }` props
+  still work. At the ends the control is a greyed `aria-disabled` span, not a
+  disabled button, and the links use `buttonVariants` instead of
+  `Button asChild`. Previous to page 1 drops `page` from the URL.
+
+### Fixed
+- `initialState.sorting` is honoured: a table opens sorted, with the arrow on
+  its column (it was ignored; `design-gaps/data-table-default-sort.md`).
+- `Pagination` with `pageCount` 0 left Next enabled; Next is now disabled
+  whenever there is no next page.
+
+### Removed
+- `DataTable`'s unused `searchKey` and `searchPlaceholder` props.
+- The barrel's `export *` of `primitives/table`, which also exported a `Table`
+  that the `components/Table` export silently shadowed. The primitive's other
+  parts are exported by name; `Table` from `@fob/lib-ui` is unchanged
+  (`components/Table`). Import the primitive from
+  `@fob/lib-ui/primitives/table`.
+
+**What apps must do when upgrading:** nothing for existing tables to keep
+working. String headers that looked sortable now sort: check any column
+whose accessor returns an object (give it a scalar accessor, a `sortingFn`
+or `enableSorting: false`). For server-paged lists, see `mode="server"`.
+
 ## [0.8.3] - 2026-11-10
 
 ### Fixed

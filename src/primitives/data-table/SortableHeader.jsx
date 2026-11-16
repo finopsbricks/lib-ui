@@ -12,6 +12,13 @@ import { cn } from "../../lib/utils";
  * state (asc / desc / none). Unsorted columns show a faint chevrons icon
  * as a hint that the column is clickable.
  *
+ * Clicking cycles asc -> desc -> back to the table's default order. Clearing
+ * the sort hands the table an empty sort; `DataTable` turns that into its
+ * default (`initialState.sorting`), or the rows' own order when it has none.
+ *
+ * `DataTable` renders this for every sortable column whose `header` is a
+ * string, so you only need it for a header that isn't plain text.
+ *
  * @param {Object} props
  * @param {any} props.column - tanstack/react-table column instance
  * @param {React.ReactNode} props.children - Header label to render inside the button
@@ -22,10 +29,16 @@ export default function SortableHeader({ column, children, align = "left" }) {
   const sorted = column.getIsSorted();
   const alignment = align === "right" ? "justify-end w-full" : "";
 
+  const handleClick = () => {
+    if (!sorted) column.toggleSorting(false);
+    else if (sorted === "asc") column.toggleSorting(true);
+    else column.clearSorting();
+  };
+
   return (
     <button
       type="button"
-      onClick={() => column.toggleSorting(sorted === "asc")}
+      onClick={handleClick}
       className={cn(
         "inline-flex items-center gap-1 h-6 cursor-pointer hover:text-foreground",
         alignment,

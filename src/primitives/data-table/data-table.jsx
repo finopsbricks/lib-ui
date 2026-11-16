@@ -11,8 +11,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "../button"
+import Pagination from "../../components/Pagination"
+import SortableHeader from "./SortableHeader"
 
 import {
   TableBody,
@@ -27,7 +30,45 @@ import { cn } from "../../lib/utils"
  * @typedef {Object} ColumnMeta
  * @property {string} [headerClassName] - CSS class for table header
  * @property {string} [cellClassName] - CSS class for table cells
+ * @property {boolean} [isNumeric] - Right-aligns the header's sort button
  */
+
+/**
+ * @param {any[]} a
+ * @param {any[]} b
+ */
+function isSameSorting(a, b) {
+  return a.length === b.length && a.every((s, i) => s.id === b[i].id && !!s.desc === !!b[i].desc)
+}
+
+/**
+ * Third click of the sort cycle (asc -> desc -> default): `SortableHeader`
+ * clears the column's sort, which leaves an empty sort. Swap that for the
+ * table's default. When the table already shows the default and its sorted
+ * column is clicked, start that column's cycle again (asc) instead of
+ * landing on the same order.
+ * @param {any[]} next
+ * @param {any[]} prev
+ * @param {any[]} default_sorting
+ */
+function withDefaultSorting(next, prev, default_sorting) {
+  if (next.length || !default_sorting.length) return next
+  if (isSameSorting(prev, default_sorting)) return [{ id: prev[0].id, desc: false }]
+  return default_sorting
+}
+
+/**
+ * Ids of the columns that can sort: the TanStack rule (has an accessor,
+ * `enableSorting` not false) applied to the column definitions.
+ * @param {any[]} columns
+ * @param {boolean | undefined} table_enable_sorting
+ */
+function sortableColumnIds(columns = [], table_enable_sorting) {
+  if (table_enable_sorting === false) return []
+  return columns
+    .filter((c) => c.enableSorting !== false && (c.accessorKey || c.accessorFn))
+    .map((c) => c.id ?? c.accessorKey)
+}
 
 /**
  * Drag-to-resize handle for a column header. Persistently visible (not just
@@ -117,13 +158,11 @@ function ColumnResizeHandle({ header, table, tableRef }) {
 }
 
 /**
- * @param {{
+ * @typedef {{
  *   columns?: any[],
  *   data?: any[],
  *   className?: string,
  *   toolbar?: (table: any) => React.ReactNode,
- *   searchKey?: string,
- *   searchPlaceholder?: string,
  *   pageSize?: number,
  *   size?: 'sm' | 'md' | 'lg',
  *   hidePagination?: boolean,
@@ -137,17 +176,82 @@ function ColumnResizeHandle({ header, table, tableRef }) {
  *   enableColumnFilter?: boolean,
  *   renderSubComponent?: (row: any) => React.ReactNode,
  *   getRowCanExpand?: (row: any) => boolean,
- *   tableLayout?: 'auto' | 'fixed'
+ *   tableLayout?: 'auto' | 'fixed',
+ *   mode?: 'client' | 'server',
+ *   total?: number,
+ *   hasMore?: boolean,
+ *   [key: string]: any
+ * }} DataTableProps
+ */
+
+/**
+ * A table of records on TanStack Table.
+ *
+ * - `mode="client"` (default, T1): all rows are in `data`; sorting and the
+ *   footer pager run in the browser.
+ * - `mode="server"` (T2): `data` is one page from the server. The sort is
+ *   the URL's `sort_by` (a column id) and `sort_order` (`ASC` | `DESC`); a
+ *   header click writes them and drops `page`. Below the table, `Pagination`
+ *   pages through `total` rows `pageSize` at a time (or `hasMore` when the
+ *   server can't count). The server must order by the same whitelist.
+ *
+ * In both modes every column with an accessor is sortable unless it sets
+ * `enableSorting: false`; a string `header` gets a `SortableHeader`.
+ * `initialState.sorting` is the default order, shown with its arrow.
+ *
+ * @param {DataTableProps} props
+ * @returns {React.JSX.Element}
+ */
+export function DataTable(props) {
+  if (props.mode === "server") return <ServerDataTable {...props} />
+  return <DataTableView {...props} />
+}
+
+/**
+ * Server mode: the sort lives in the URL, so it survives a reload and can be
+ * shared. A `sort_by` that isn't a sortable column (an old link, a typo) is
+ * ignored and the default order shows.
+ * @param {DataTableProps} props
+ */
+function ServerDataTable(props) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const search_params = useSearchParams()
+  const default_sorting = props.initialState?.sorting ?? []
+  const sort_by = search_params?.get("sort_by")
+  const sorting = sort_by && sortableColumnIds(props.columns, props.enableSorting).includes(sort_by)
+    ? [{ id: sort_by, desc: String(search_params.get("sort_order")).toUpperCase() !== "ASC" }]
+    : default_sorting
+
+  /** @param {any[]} next */
+  const pushSorting = (next) => {
+    const params = new URLSearchParams(search_params?.toString())
+    params.delete("sort_by")
+    params.delete("sort_order")
+    params.delete("page")
+    if (next.length && !isSameSorting(next, default_sorting)) {
+      params.set("sort_by", next[0].id)
+      params.set("sort_order", next[0].desc ? "DESC" : "ASC")
+    }
+    const query = params.toString()
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false })
+  }
+
+  return <DataTableView {...props} serverSorting={sorting} onServerSortingChange={pushSorting} />
+}
+
+/**
+ * @param {DataTableProps & {
+ *   serverSorting?: any[],
+ *   onServerSortingChange?: (sorting: any[]) => void
  * }} props
  * @returns {React.JSX.Element}
  */
-export function DataTable({
+function DataTableView({
   columns,
   data,
   className,
   toolbar,
-  searchKey,
-  searchPlaceholder = "Search...",
   pageSize = 30,
   size = "md",
   hidePagination = false,
@@ -156,19 +260,36 @@ export function DataTable({
   initialState: passedInitialState,
   renderSubComponent,
   tableLayout = "auto",
+  mode = "client",
+  total,
+  hasMore,
+  serverSorting,
+  onServerSortingChange,
   ...props
 }) {
-  const [sorting, setSorting] = React.useState([])
+  const is_server = mode === "server"
+  const default_sorting = passedInitialState?.sorting ?? []
+  const [clientSorting, setClientSorting] = React.useState(default_sorting)
+  const sorting = is_server ? serverSorting : clientSorting
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
   const [expanded, setExpanded] = React.useState({})
   const tableRef = React.useRef(null)
 
+  const handleSortingChange = (updater) => {
+    const next = typeof updater === "function" ? updater(sorting) : updater
+    const resolved = withDefaultSorting(next, sorting, default_sorting)
+    if (is_server) onServerSortingChange(resolved)
+    else setClientSorting(resolved)
+  }
+
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
+    manualSorting: is_server,
+    manualPagination: is_server,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
@@ -244,10 +365,17 @@ export function DataTable({
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
+                    const can_sort = !header.isPlaceholder && header.column.getCanSort()
+                    const sorted = header.column.getIsSorted()
+                    const header_def = header.column.columnDef.header
+                    // @ts-ignore - Custom meta property
+                    const meta = header.column.columnDef.meta
+                    const align_right = meta?.isNumeric || /\btext-right\b/.test(meta?.headerClassName || "")
                     return (
                       <TableHead
                         key={header.id}
                         data-col-id={header.column.id}
+                        aria-sort={can_sort ? (sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none") : undefined}
                         style={{
                           width: header.getSize(),
                           // Only set the offset for the side this column is
@@ -294,10 +422,13 @@ export function DataTable({
                       >
                         {header.isPlaceholder
                           ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                          : can_sort && typeof header_def === "string" && header_def
+                            ? (
+                              <SortableHeader column={header.column} align={align_right ? "right" : "left"}>
+                                {header_def}
+                              </SortableHeader>
+                            )
+                            : flexRender(header_def, header.getContext())}
                         {header.column.getCanResize() && (
                           <ColumnResizeHandle header={header} table={table} tableRef={tableRef} />
                         )}
@@ -380,7 +511,12 @@ export function DataTable({
             </TableBody>
         </table>
       </div>
-      {!hidePagination && (
+      {is_server && !hidePagination && (
+        <div className="flex-shrink-0 pt-2">
+          <Pagination total={total} hasMore={hasMore} pageSize={pageSize} />
+        </div>
+      )}
+      {!is_server && !hidePagination && (
         <div className="flex items-center justify-end space-x-2 pt-2 pb-0 flex-shrink-0">
           <div className="flex-1 text-sm text-muted-foreground">
             {(() => {

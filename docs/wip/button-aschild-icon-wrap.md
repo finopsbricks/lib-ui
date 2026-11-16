@@ -33,7 +33,7 @@ The button styles (`inline-flex`, `whitespace-nowrap`, `items-center`) land on t
 ### Also found (design-standards component pages, 2026-11-06)
 
 - **No focus ring on the link.** The focus styles (`focus-visible:ring-[3px] ring-ring/50`) are on the span, but the `<a>` is what takes keyboard focus, so a focused button-link shows no ring.
-- **lib-ui uses it itself.** `src/components/Pagination.jsx:33,57` renders Previous and Next as `Button asChild` around a `Link`, so Pagination's links have the bug (see [design-gaps/pagination-landmark-and-current.md](./design-gaps/pagination-landmark-and-current.md)).
+- **lib-ui used it itself.** `Pagination` rendered Previous and Next as `Button asChild` around a `Link`; since 0.9.0 it puts `buttonVariants` on the `Link` instead.
 - **The consumer workaround.** design-standards' [Button page](https://design.echoalex.com/components/button) tells consumers to put `buttonVariants()` on the link instead (`<Link className={buttonVariants({ size: 'sm' })}>`), not `<Link><Button>`, which nests a button inside a link. Update that page once this is fixed.
 
 ## Why the span wrapper exists

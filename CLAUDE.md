@@ -26,8 +26,13 @@ This package is part of the **FinOpsBricks** monorepo (`/Users/alex/ec2code/fino
 - Textarea, Timeline, Toggle, ToggleGroup, Tooltip, Typography
 
 ### Data Table
-- DataTable (TanStack React Table wrapper)
+- DataTable (TanStack React Table wrapper). Columns sort by default (opt out
+  with `enableSorting: false`); `initialState.sorting` is the default order.
+  `mode="server"` keeps the sort in the URL (`sort_by`/`sort_order`) and
+  renders `Pagination` from `total`/`hasMore` + `pageSize`.
+- SortableHeader (rendered automatically for string headers)
 - DateHeader
+- Pagination (`components/Pagination`): URL `page`, keeps other params
 
 ### Utilities
 - `cn()` - Tailwind class merger

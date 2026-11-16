@@ -5,6 +5,7 @@ import '../src/styles/globals.css';
 const SM_EDGE_VIEWPORTS = {
   below_sm: { name: 'Below sm (639)', styles: { width: '639px', height: '900px' }, type: 'tablet' },
   at_sm: { name: 'At sm (640)', styles: { width: '640px', height: '900px' }, type: 'tablet' },
+  desktop: { name: 'Desktop (1440)', styles: { width: '1440px', height: '900px' }, type: 'desktop' },
 };
 
 const preview = {

@@ -155,3 +155,39 @@ export const WhenViewingNumericColumn = {
     await expect(amount_header).toBeInTheDocument();
   },
 };
+
+/**
+ * USER JOURNEY STORY: When Clicking a Sorted Column a Third Time
+ *
+ * When: User has sorted Name ascending then descending, and clicks again.
+ *
+ * User sees: The rows go back to their original order and the header shows
+ * the faint chevrons again (asc -> desc -> default). The <th> carries
+ * aria-sort at every step. Columns written with an explicit SortableHeader
+ * (as TransactionsTable does) get the same cycle as plain-text headers.
+ *
+ * Tests: the three-click cycle and aria-sort on the header cell.
+ */
+export const WhenClickingSortedColumnAThirdTime = {
+  parameters: {
+    description: 'Third click on a sorted header returns the rows to the default order. aria-sort on the header cell follows each step.',
+  },
+  render: () => (
+    <DataTable columns={sample_columns} data={sample_rows} hidePagination enableSorting />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const name_header = canvas.getByRole('button', { name: /Name/ });
+    const th = name_header.closest('th');
+    const first_name = () => canvasElement.querySelector('tbody tr td').textContent;
+    await expect(th).toHaveAttribute('aria-sort', 'none');
+    await userEvent.click(name_header);
+    await expect(th).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.click(name_header);
+    await expect(th).toHaveAttribute('aria-sort', 'descending');
+    await expect(first_name()).toBe('Delta Ltd');
+    await userEvent.click(name_header);
+    await expect(th).toHaveAttribute('aria-sort', 'none');
+    await expect(first_name()).toBe('Alpha Corp');
+  },
+};
