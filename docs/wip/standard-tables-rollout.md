@@ -1,6 +1,6 @@
 # Standard tables (T0–T2): build in lib-ui, roll out to every app
 
-## Status: IN PROGRESS (~45%): lib-ui 0.9.1 tagged; Phase 2 built in statements, Alex's production check open; Phase 3 standard written in design-standards (2026-11-17, decision 0011); Phase 4 next
+## Status: IN PROGRESS (~80%): lib-ui 0.9.1 tagged; Phase 2 built in statements, Alex's production check open; Phase 3 standard written in design-standards (2026-11-17, decision 0011); Phase 4 done (2026-11-17); Phase 5 next
 ## Priority: P2: most list tables can't be sorted (e.g. statements /accounts); sort and pagination each have 5+ implementations
 ## Bet: finopsbricks
 
@@ -241,7 +241,8 @@ Built as 0.9.0 on main, not tagged (2026-11-16). API as built:
 - [x] Remove dead code: `rules/_components/RulesTable.jsx`, `statements/_components/UploadTable.jsx`, `statements/[s_id]/_components/DataGrid.jsx`
 - [x] Floating buttons no longer cover the pager: `FoldFilterContainer` leaves room below them (pb-20 phone, pb-16 desktop)
 - [x] Release lib-ui 0.9.0 (tagged `3b470ab`), pin statements to the tag
-- [ ] Ship statements; Alex checks it in production
+- [x] Ship statements: lib-ui 0.9.1, statements `377b1de7`, CI + deploy green, public smoke OK (2026-11-17)
+- [ ] Alex checks the logged-in pages in production (no statements smoke session yet)
 
 Server sort helper in statements: `src/utils/filter/sortOrder.js` (`sortOrder`, `parsePage`), used by `statementOrder`, activity, admin jobs and the staff queue.
 
@@ -250,12 +251,23 @@ Server sort helper in statements: `src/utils/filter/sortOrder.js` (`sortOrder`, 
 - [x] design-standards `pagination` page: the one server pager (`total` + `pageSize` / `hasMore`, built-in `nav` and `aria-current`)
 - [x] design-standards decision 0011 "tables come in variants chosen by where the rows live"; design-standards pinned to lib-ui v0.9.1 (2026-11-17)
 
-### Phase 4: template and the other finopsbricks apps ❌
-- [ ] `app-template` settings lists, then copy to every app that has them
-- [ ] txn
-- [ ] ledger (migrate to T2, delete the local `SortableHead` and the three `Pager`s)
-- [ ] orchestrator.finopsbricks.com (+ delete `hooks/useTableState.js`, `components/TableOrCardsWithState.jsx`)
-- [ ] mdm, snapshots
+### Phase 4: template and the other finopsbricks apps ✅
+All on lib-ui 0.9.1, shipped 2026-11-17, CI + deploy green.
+- [x] `app-template` settings lists (members, API keys, tags), copied to documents, mail, assistant. documents: Created sort fixed for the new click cycle. gst-india skipped: no `.git` on the Mac
+- [x] txn: accounts, counterparties (500 cap removed), parsed emails T2, transactions Sort By select removed, settings lists incl. mailboxes
+- [x] ledger: transactions and entries on T2; local `SortableHead` and three `Pager`s deleted; account view `Pagination hasMore`; accounts flat view T1; settings lists. Ledger WIPs closed
+- [x] orchestrator.finopsbricks.com: stations, work records T2 (10-page cap fixed, new Created column), line detail, workers, admin orgs/jobs, staff queue T2, settings lists; dead `useTableState`/`TableOrCardsWithState` deleted
+- [x] mdm (from lib-ui 0.5.0), snapshots: objects, records, dashboards, widgets, settings lists
+
+Proposals from Phase 4 (not done):
+- Smoke sessions missing for statements, txn, orchestrator, mdm, snapshots, documents, assistant: logged-in pages checked only in ledger and mail
+- `/sw.js` is redirected to login by the auth middleware in orchestrator and assistant, failing the iPhone smoke (predates this work)
+- Staff queue throws `useSidebar must be used within a SidebarProvider` in statements and orchestrator (predates this work)
+- Ledger entries has no visible default sort (`created_at` isn't a column); ledger accounts table view now pages 30 at a time
+- Numeric columns not right-aligned on admin orgs and stations; row actions without the row name in their label; settings tables scroll sideways on phones (cards are T3)
+- Settings pages define `<Content />` inside render, so a T1 sort resets after a row action: render `{Content()}` instead
+- txn mailbox row actions (4 buttons) should go behind one ⋯ menu
+- Moving the app shell lock from 768 to 640 (txn, mail) changes iOS between 640–767px: needs a real-device check
 
 ### Phase 5: internalops and assemblyline ❌
 - [ ] tne, timelog
