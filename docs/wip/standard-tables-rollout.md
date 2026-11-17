@@ -1,6 +1,6 @@
 # Standard tables (T0–T2): build in lib-ui, roll out to every app
 
-## Status: IN PROGRESS (~80%): lib-ui 0.9.1 tagged; Phase 2 built in statements, Alex's production check open; Phase 3 standard written in design-standards (2026-11-17, decision 0011); Phase 4 done (2026-11-17); Phase 5 next
+## Status: IN PROGRESS (~95%): lib-ui 0.9.1 tagged; Phase 2 built in statements, Alex's production check open; Phase 3 standard written in design-standards (2026-11-17, decision 0011); Phase 4 done (2026-11-17); Phase 5 done except orchestrator.assemblyline.sh deploy (CI runner pin awaiting Alex)
 ## Priority: P2: most list tables can't be sorted (e.g. statements /accounts); sort and pagination each have 5+ implementations
 ## Bet: finopsbricks
 
@@ -269,10 +269,16 @@ Proposals from Phase 4 (not done):
 - txn mailbox row actions (4 buttons) should go behind one ⋯ menu
 - Moving the app shell lock from 768 to 640 (txn, mail) changes iOS between 640–767px: needs a real-device check
 
-### Phase 5: internalops and assemblyline ❌
-- [ ] tne, timelog
-- [ ] orchestrator.assemblyline.sh
-- [ ] fob-watch, control-room (add lib-ui first)
+### Phase 5: internalops and assemblyline 🔄
+- [x] tne, timelog: shipped 2026-11-17, CI + deploy green, logged-in smoke OK. tne expenses/claims/approvals/people T1 (selection and phone cards kept); settings lists. timelog `CategoryTable` waits for T5
+- [ ] orchestrator.assemblyline.sh: ported and pushed (`9e2e06dc`), **not deployed**. CI's Storybook job fails because `ubuntu-latest` is now 26.04, where Playwright 1.58 can't install Chromium. Fix: pin `ci.yml` jobs to `ubuntu-24.04` as the sibling did (`b969ef50`); waiting for Alex's OK (workflow change)
+- [x] fob-watch (`a2aae67`), control-room (`da4511a`, CI green): lib-ui added with tokens mapped onto each app's dark palette (lib-ui `globals.css` not imported); bin, worker/factory, overview and files tables on DataTable (compact). Orphaned folders moved to their own section. Pushed, no release tag
+
+Proposals from Phase 5 (not done):
+- lib-ui: `onRowClick` (or row props) on DataTable; controlled `rowSelection` (needed for T3); resize-handle label is read as part of every header name; a helper for TanStack `sortUndefined: 'last'` returning 1 when both values are blank; note in the docs that inline `cell` functions remount cells
+- lib-ui has `"license": "MIT"` in package.json but no LICENSE file; control-room (public, Apache-2.0) now depends on it
+- `ListActivity.jsx` in tne and timelog has its own Previous/Next pager: move to lib-ui `Pagination` (T2)
+- Next 16.4.2 security advisory in fob-watch and control-room
 
 UI work in Phases 2–5 goes to the `ux-designer` agent. Each app ships through the `ship` skill. Create a short per-app WIP when an app's turn starts, linking back here.
 
