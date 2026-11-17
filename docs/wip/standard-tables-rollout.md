@@ -1,6 +1,6 @@
 # Standard tables (T0–T2): build in lib-ui, roll out to every app
 
-## Status: IN PROGRESS (~35%): lib-ui 0.9.0 tagged; Phase 2 built in statements (2026-11-16), shipping and Alex's production check next
+## Status: IN PROGRESS (~45%): lib-ui 0.9.1 tagged; Phase 2 built in statements, Alex's production check open; Phase 3 standard written in design-standards (2026-11-17, decision 0011); Phase 4 next
 ## Priority: P2: most list tables can't be sorted (e.g. statements /accounts); sort and pagination each have 5+ implementations
 ## Bet: finopsbricks
 
@@ -245,9 +245,10 @@ Built as 0.9.0 on main, not tagged (2026-11-16). API as built:
 
 Server sort helper in statements: `src/utils/filter/sortOrder.js` (`sortOrder`, `parsePage`), used by `statementOrder`, activity, admin jobs and the staff queue.
 
-### Phase 3: Standard written down ❌
-- [ ] design-standards `data-table.mdx`: layers, the variant table, the choosing rule, sortable by default, server mode, the click cycle, the URL-only persistence rule
-- [ ] design-standards `pagination` page: the one server pager
+### Phase 3: Standard written down ✅
+- [x] design-standards `data-table.mdx`: layers, the variant table, the choosing rule, sortable by default, server mode, the click cycle, the URL-only persistence rule, no silent caps; live demos of a default sort and of server mode (in a frame, sorting and paging through its own URL)
+- [x] design-standards `pagination` page: the one server pager (`total` + `pageSize` / `hasMore`, built-in `nav` and `aria-current`)
+- [x] design-standards decision 0011 "tables come in variants chosen by where the rows live"; design-standards pinned to lib-ui v0.9.1 (2026-11-17)
 
 ### Phase 4: template and the other finopsbricks apps ❌
 - [ ] `app-template` settings lists, then copy to every app that has them
@@ -263,12 +264,13 @@ Server sort helper in statements: `src/utils/filter/sortOrder.js` (`sortOrder`, 
 
 UI work in Phases 2–5 goes to the `ux-designer` agent. Each app ships through the `ship` skill. Create a short per-app WIP when an app's turn starts, linking back here.
 
-## Proposals (noticed in Phases 1–2, not done)
+## Proposals (noticed in Phases 1–3, not done)
 - **Cards view has no sort control** on `/statements` (it keeps whatever sort the URL has). Decided 2026-11-16: leave for T3, whose phone cards need one too.
 - **Old sort links:** `?sort_by=ASC` on statements and transactions, and `?sort_by=created_desc` etc. on rules, now open in the default order instead of the old one; nothing crashes.
 - **Category/entity detail loads every matching transaction.** Fine at today's sizes; an "Uncategorized" bucket in a large org could be thousands of rows. If one gets slow, that view becomes T2.
 - **`FoldFilterContainer` switches at 767px (`md`)**, not lib-ui's `sm` (640) line from 0.8.0. Not changed here.
 - **The staff queue page throws `useSidebar must be used within a SidebarProvider`** in the real app. The T2 changes don't touch its breadcrumbs or sidebar, but the error wasn't checked against the pre-change code.
+- **design-standards members and API-keys settings pages show T0 (`primitives/table`)**, while this inventory makes those settings lists T1. Align the pages when `app-template` moves (Phase 4).
 - **Pagination on phone cards** should be "Show N more" per design-standards Responsive; the statements cards view uses Previous/Next for now.
 
 ## Related Files
