@@ -7,9 +7,18 @@ import { cn } from '../lib/utils';
 
 /**
  * Our implementation of tabs. This is the tab format that we will be using across the app.
+ * The active tab is in the URL (`?tab=`); with no tab in the URL, the first tab is selected.
+ * @param {Object} props
+ * @param {Array<{ slug: string, name: React.ReactNode, body: React.ReactNode, stats?: number | string }>} props.tabs
+ * @param {string} [props.variant] - visual variant; only 'plain' today
+ * @param {string} [props.tabName] - the query parameter that holds the active tab
+ * @param {boolean} [props.keepMounted] - render every panel once and hide the inactive ones, so their
+ *   DOM and state (a loaded iframe, typed input) survive tab switches. Default: only the active panel is mounted.
+ * @returns {React.JSX.Element}
  */
-export default function CustomTab({tabs=[], variant='plain', tabName='tab'}) {
+export default function CustomTab({tabs=[], variant='plain', tabName='tab', keepMounted=false}) {
   const searchParams = useSearchParams();
+  const tabParam = searchParams.get(tabName);
   const [activeTab, setActiveTab] = useState(() => {
     const tabParam = searchParams.get(tabName);
     if (tabParam) {
@@ -19,13 +28,12 @@ export default function CustomTab({tabs=[], variant='plain', tabName='tab'}) {
     return tabs[0]?.slug || '';
   });
 
+  // Follow the URL when its tab changes, including Back to a URL with no tab (the first tab).
+  // Keyed on the param's value, not on `tabs`, which callers rebuild on every render.
   useEffect(() => {
-    const tabParam = searchParams.get(tabName);
-    if (tabParam) {
-      const tabExists = tabs.find(tab => tab.slug === tabParam);
-      setActiveTab(tabExists ? tabParam : (tabs[0]?.slug || ''));
-    }
-  }, [searchParams, tabs, tabName]);
+    const tabExists = tabParam && tabs.find(tab => tab.slug === tabParam);
+    setActiveTab(tabExists ? tabParam : (tabs[0]?.slug || ''));
+  }, [tabParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleTabChange = (newValue) => {
     setActiveTab(newValue);
@@ -82,8 +90,10 @@ export default function CustomTab({tabs=[], variant='plain', tabName='tab'}) {
         <TabsContent
           key={tab.slug}
           value={tab.slug}
+          forceMount={keepMounted || undefined}
           className={cn(
             "mt-0 bg-background flex-1 min-h-0 flex flex-col",
+            keepMounted && "data-[state=inactive]:hidden",
           )}
         >
           {tab.body}

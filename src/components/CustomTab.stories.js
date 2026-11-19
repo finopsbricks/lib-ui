@@ -2,6 +2,7 @@
  * CustomTab Stories - User Journey Pattern
  */
 
+import React, { useState } from 'react';
 import CustomTab from './CustomTab';
 import { expect, within, userEvent } from 'storybook/test';
 
@@ -305,5 +306,100 @@ export const DeveloperInteractive = {
 
     await userEvent.click(canvas.getByRole('tab', { name: /tab 1/i }));
     await expect(canvas.getByText('Content of Tab 1')).toBeInTheDocument();
+  },
+};
+
+/** A panel with state of its own: an input and a counter. */
+function Notes() {
+  const [count, setCount] = useState(0);
+  return (
+    <div className="flex flex-col gap-2 p-4">
+      <label htmlFor="notes">Your notes</label>
+      <input id="notes" className="border rounded px-2 py-1" />
+      <button type="button" onClick={() => setCount(count + 1)}>Clicked {count} times</button>
+    </div>
+  );
+}
+
+const stateful_tabs = [
+  { slug: 'notes', name: 'Notes', body: <Notes /> },
+  { slug: 'other', name: 'Other', body: <p className="p-4">Other panel</p> },
+];
+
+/**
+ * USER JOURNEY STORY 5: Keep Mounted
+ * With keepMounted, a panel's DOM and state survive switching away and back (a loaded file
+ * preview isn't fetched again). Inactive panels are hidden, not removed.
+ */
+export const KeepMounted = {
+  args: { tabs: stateful_tabs, keepMounted: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText('Your notes');
+    await userEvent.type(input, 'hello');
+    await userEvent.click(canvas.getByRole('button', { name: 'Clicked 0 times' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Clicked 1 times' }));
+
+    await userEvent.click(canvas.getByRole('tab', { name: 'Other' }));
+    await expect(canvas.getByText('Other panel')).toBeVisible();
+    await expect(input).toBeInTheDocument();
+    await expect(input).not.toBeVisible();
+
+    await userEvent.click(canvas.getByRole('tab', { name: 'Notes' }));
+    await expect(canvas.getByLabelText('Your notes')).toBe(input);
+    await expect(input).toHaveValue('hello');
+    await expect(canvas.getByRole('button', { name: 'Clicked 2 times' })).toBeVisible();
+    await expect(canvas.getByText('Other panel')).not.toBeVisible();
+  },
+};
+
+/**
+ * USER JOURNEY STORY 6: Default Unmounts Inactive Panels
+ * Without keepMounted, only the active panel is in the DOM, so a panel's state resets.
+ */
+export const DefaultUnmountsInactivePanels = {
+  args: { tabs: stateful_tabs },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByLabelText('Your notes'), 'hello');
+    await userEvent.click(canvas.getByRole('tab', { name: 'Other' }));
+    await expect(canvas.queryByLabelText('Your notes')).toBeNull();
+    await userEvent.click(canvas.getByRole('tab', { name: 'Notes' }));
+    await expect(canvas.getByLabelText('Your notes')).toHaveValue('');
+    await expect(canvas.queryByText('Other panel')).toBeNull();
+  },
+};
+
+/**
+ * USER JOURNEY STORY 7: No Tab In The URL
+ * With no tab in the URL (a first visit, or Back to the URL without one), the first tab is selected.
+ */
+export const NoTabInUrlSelectsFirst = {
+  args: { tabs: stateful_tabs },
+  parameters: { nextjs: { appDirectory: true, navigation: { query: {} } } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('tab', { name: 'Notes' })).toHaveAttribute('aria-selected', 'true');
+    await expect(canvas.getByLabelText('Your notes')).toBeInTheDocument();
+  },
+};
+
+/**
+ * USER JOURNEY STORY 8: Tab In The URL
+ * A link with `?tab=other` opens on that tab; an unknown tab falls back to the first.
+ */
+export const TabInUrl = {
+  args: { tabs: stateful_tabs },
+  parameters: { nextjs: { appDirectory: true, navigation: { query: { tab: 'other' } } } },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('tab', { name: 'Other' })).toHaveAttribute('aria-selected', 'true');
+  },
+};
+
+export const UnknownTabInUrlSelectsFirst = {
+  args: { tabs: stateful_tabs },
+  parameters: { nextjs: { appDirectory: true, navigation: { query: { tab: 'nope' } } } },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('tab', { name: 'Notes' })).toHaveAttribute('aria-selected', 'true');
   },
 };
