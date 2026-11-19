@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.9.2] - 2026-11-19
+
+### Added
+- `CustomTab` `keepMounted`: every panel renders once and inactive panels are hidden, so their DOM and state (a loaded file preview, typed input) survive tab switches. Off by default.
+
+### Fixed
+- `CustomTab`: going Back to a URL without the tab parameter selects the first tab; before, the previous tab stayed selected.
+
 ## [0.9.1] - 2026-11-16
 
 ### Fixed
