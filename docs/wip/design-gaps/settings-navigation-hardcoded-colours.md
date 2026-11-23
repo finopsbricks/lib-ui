@@ -1,6 +1,6 @@
 # SettingsNavigation uses hard-coded greys, blue and white
 
-## Status: BLOCKED - awaiting Alex's review of the light and dark screenshots (~35%)
+## Status: IN PROGRESS (~90%) - timelog push and gst-india commit wait on Alex
 ## Priority: P3: settings nav stays white in dark mode, which users must opt in to
 ## Bet: finopsbricks
 
@@ -46,27 +46,31 @@ Light mode changes slightly: item text goes from gray-600 (7.6:1) to `muted-fore
 
 ## Implementation Phases
 
-### Phase 1: Fix in lib-ui, with stories and screenshots 🔄
+### Phase 1: Fix in lib-ui, with stories and screenshots ✅
 - [x] Swap the palette classes for tokens in `SettingsNavigation.jsx`
 - [x] Stories `OnDesktopInDark` and `OnPhoneInDark` in `SettingsContainer.stories.js`; they fail on the old component (checked) and pass on the new
 - [x] `npm run storybook:test:ci`: 239/239 pass
 - [x] Before/after screenshots at 1440, 744, 640 and 390 (iPhone 13), light and dark
-- [ ] Alex approves the screenshots
+- [x] Alex approves the screenshots (2026-11-23)
 
-### Phase 2: Release and roll out ❌
-- [ ] Bump lib-ui (0.9.3), tag and release
-- [ ] Bump the pin and ship each app that renders `SettingsNavigation`: app-template, assistant, documents, gst-india, ledger, mail, mdm, orchestrator (finopsbricks), snapshots, statements, txn, orchestrator.assemblyline.sh, timelog, tne.internalops.ai
-- [ ] Not rendering it (no bump needed for this fix): console.finopsbricks.com, fob-watch, control-room, console.internalops.ai
+### Phase 2: Release and roll out 🔄
+- [x] Release lib-ui 0.9.3 (`07f1fe4`, tag `v0.9.3`, CI green)
+- [x] Bump the pin, build and ship: app-template, assistant, documents, ledger, mail, mdm, orchestrator.finopsbricks.com, snapshots, statements, txn, orchestrator.assemblyline.sh, tne.internalops.ai
+- [x] txn `AccountsNavigation` on tokens (same mapping, plus statements' dark category bands, balances and chips); stories in light and dark
+- [x] statements `AccountsNavigation` bar `border-blue-500` → `border-primary` (the rest was already on tokens)
+- [ ] timelog: bump committed (`10437d6`), not pushed: main carries 6 unpushed feature commits from 2026-11-23 that a push would deploy; Alex decides
+- [ ] gst-india: bumped 0.5.0 → 0.9.3 and checked locally (lint, typecheck, tests, build, Storybook, public pages), but the folder has no git repo and no GitHub remote, so nothing is committed
+- Not rendering it (no bump): console.finopsbricks.com, fob-watch, control-room, console.internalops.ai
 
-### Phase 3: Update design-standards ❌
-- [ ] Bump the lib-ui pin in design-standards and update the pages above
+### Phase 3: Update design-standards ✅
+- [x] Pin v0.9.3; `split-page-layout.mdx` Anatomy names the tokens, Responsive behavior describes the phone row (`e05271e`)
 
 ## Noticed, not done (proposals)
 
-- `AccountsNavigation.jsx` in txn (`accounts/[a_id]/_components`) and statements (`accounts/[acc_id]/_components`) has the same `bg-white border-gray-200` panel: same dark-mode bug, app code, separate fix.
-- `split-page-layout.mdx` › Responsive behavior still says the navigation stays beside the content on phones; it became a row above the content (`settings-container-phone-layout.md`). Fix with Phase 3.
 - `aria-current="page"` is already on the current link here; the wider gap is tracked in `nav-aria-current.md`.
-- The dark-mode bar contrast question above.
+- The dark-mode bar contrast: shipped as is, follow-up in `settings-navigation-dark-bar-contrast.md` (P4).
+- assistant and orchestrator.finopsbricks.com register `/sw.js` (lib-ui `ServiceWorkerRegistration`) but serve no service worker; the middleware sends it to login, so iPhone WebKit logs an access-control error on every page (seen in the 0.9.3 smoke check; not caused by the bump).
+- txn and statements balance colours use raw green/red with `dark:` overrides (no token for positive/negative balance); a token would replace them.
 
 ## Related Files
 
