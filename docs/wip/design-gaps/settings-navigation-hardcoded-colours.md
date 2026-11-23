@@ -1,6 +1,6 @@
 # SettingsNavigation uses hard-coded greys, blue and white
 
-## Status: IN PROGRESS (~90%) - timelog push and gst-india commit wait on Alex
+## Status: BLOCKED (~95%) - only gst-india left: it has no git repo, so its local bump can't be committed
 ## Priority: P3: settings nav stays white in dark mode, which users must opt in to
 ## Bet: finopsbricks
 
@@ -53,13 +53,13 @@ Light mode changes slightly: item text goes from gray-600 (7.6:1) to `muted-fore
 - [x] Before/after screenshots at 1440, 744, 640 and 390 (iPhone 13), light and dark
 - [x] Alex approves the screenshots (2026-11-23)
 
-### Phase 2: Release and roll out 🔄
+### Phase 2: Release and roll out ✅ (except gst-india)
 - [x] Release lib-ui 0.9.3 (`07f1fe4`, tag `v0.9.3`, CI green)
 - [x] Bump the pin, build and ship: app-template, assistant, documents, ledger, mail, mdm, orchestrator.finopsbricks.com, snapshots, statements, txn, orchestrator.assemblyline.sh, tne.internalops.ai
 - [x] txn `AccountsNavigation` on tokens (same mapping, plus statements' dark category bands, balances and chips); stories in light and dark
 - [x] statements `AccountsNavigation` bar `border-blue-500` → `border-primary` (the rest was already on tokens)
-- [ ] timelog: bump committed (`10437d6`), not pushed: main carries 6 unpushed feature commits from 2026-11-23 that a push would deploy; Alex decides
-- [ ] gst-india: bumped 0.5.0 → 0.9.3 and checked locally (lint, typecheck, tests, build, Storybook, public pages), but the folder has no git repo and no GitHub remote, so nothing is committed
+- [x] timelog: bump `10437d6` shipped with Alex's 6 commits from 2026-11-23. CI first failed: Playwright 1.58 can't install Chromium on `ubuntu-latest` (26.04); fixed by pinning CI runners to `ubuntu-24.04` (`177b3d9`, per devops WIP `pin-ci-runners-ubuntu-24-04.md`). CI (all jobs, incl. Storybook) and Deploy Main green
+- [ ] gst-india: bumped 0.5.0 → 0.9.3 in the local folder and checked (lint, typecheck, tests, build, Storybook, public pages; logged-in pages not checked, no local DB). The folder has no git repo and no GitHub remote, so nothing is committed. Close this WIP once gst-india has a repo with the bump in it
 - Not rendering it (no bump): console.finopsbricks.com, fob-watch, control-room, console.internalops.ai
 
 ### Phase 3: Update design-standards ✅
