@@ -8,6 +8,7 @@ import { cn } from '../lib/utils';
 /**
  * Settings navigation: a vertical list beside the content from `sm` (640px) up; on phones, a row of links
  * above the content that scrolls sideways when it doesn't fit, with the current page kept in view.
+ * Colours come from theme tokens (`bg-card`, `bg-accent`, `border-primary`), so it follows light and dark mode.
  * @param {Object} props
  * @param {{ o_id: string }} props.params - Route parameters
  * @param {Array<{ label: string, path: string }>} props.navItems - Navigation items
@@ -53,10 +54,10 @@ export default function SettingsNavigation({ params, navItems }) {
                 href={href}
                 aria-current={isSelected ? 'page' : undefined}
                 className={cn(
-                    'block shrink-0 whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900',
+                    'block shrink-0 whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
                     isSelected
-                        ? 'bg-gray-100 text-gray-900 border-b-2 border-blue-500 sm:border-b-0 sm:border-r-2'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-accent text-accent-foreground border-b-2 border-primary sm:border-b-0 sm:border-r-2'
+                        : 'text-muted-foreground'
                 )}
             >
                 {children}
@@ -65,7 +66,7 @@ export default function SettingsNavigation({ params, navItems }) {
     }
 
     return (
-        <nav ref={nav} aria-label="Settings" className="overflow-hidden border border-gray-200 rounded-lg bg-white sm:w-48 sm:overflow-visible">
+        <nav ref={nav} aria-label="Settings" className="overflow-hidden border rounded-lg bg-card sm:w-48 sm:overflow-visible">
             <div className="relative flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-col sm:overflow-visible">
                 {navItems.map((item) => (
                     <Item key={item.path} href={`/orgs/${o_id}/${item.path}`}>

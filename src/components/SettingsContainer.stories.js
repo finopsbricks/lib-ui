@@ -2,7 +2,8 @@
  * SettingsContainer Stories - User Journey Pattern
  *
  * A settings page: SettingsNavigation in columnOne, the page's content in columnTwo. From sm (640px) the
- * navigation sits beside the content; on phones it is a row of links above it.
+ * navigation sits beside the content; on phones it is a row of links above it. The navigation takes its colours
+ * from theme tokens, so it follows light and dark mode (the *InDark stories).
  */
 import { within, expect, waitFor } from 'storybook/test';
 import SettingsContainer from './SettingsContainer';
@@ -143,5 +144,48 @@ export const AtSm = {
     await expect(nav.width).toBe(192);
     await expect(nav.right).toBeLessThan(content.left);
     await expect(Math.abs(nav.top - content.top)).toBeLessThan(2);
+  },
+};
+
+const DARK = { theme: 'dark' };
+
+// The navigation panel, its current link and another link, with their computed colours.
+const navColours = (canvasElement) => {
+  const canvas = within(canvasElement);
+  const colour = (el) => getComputedStyle(el).backgroundColor;
+  const nav = canvas.getByRole('navigation', { name: 'Settings' });
+  const current = canvas.getByRole('link', { current: 'page' });
+  const other = canvas.getByRole('link', { name: 'General' });
+  return { nav: colour(nav), current: colour(current), other_text: getComputedStyle(other).color, current_el: current };
+};
+const WHITE = 'rgb(255, 255, 255)';
+
+/**
+ * USER JOURNEY STORY 6: Desktop, dark mode — the navigation is a dark card on the dark page, not a white panel;
+ * the current page keeps its highlight and its bar.
+ */
+export const OnDesktopInDark = {
+  globals: DARK,
+  play: async ({ canvasElement }) => {
+    await expect(document.documentElement).toHaveClass('dark');
+    const { nav, current, other_text, current_el } = navColours(canvasElement);
+    await expect(nav).not.toBe(WHITE);
+    await expect(current).not.toBe(nav); // the current page is highlighted
+    await expect(other_text).not.toBe('rgb(75, 85, 99)'); // not gray-600 on the dark card
+    await expect(getComputedStyle(current_el).borderRightWidth).toBe('2px');
+  },
+};
+
+/**
+ * USER JOURNEY STORY 7: Phone, dark mode — the row of links is dark too, the current page marked by its bottom bar.
+ */
+export const OnPhoneInDark = {
+  globals: { ...PHONE, ...DARK },
+  play: async ({ canvasElement }) => {
+    const { nav, current, current_el } = navColours(canvasElement);
+    await expect(nav).not.toBe(WHITE);
+    await expect(current).not.toBe(nav);
+    await expect(getComputedStyle(current_el).borderBottomWidth).toBe('2px');
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
   },
 };
