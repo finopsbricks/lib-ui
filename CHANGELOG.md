@@ -15,6 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.9.3] - 2026-11-23
+
+### Fixed
+- `SettingsNavigation` in dark mode: the panel was `bg-white` with Tailwind greys and a
+  `blue-500` bar, so it stayed a white panel on the dark page. It now uses tokens: panel
+  `bg-card` with `border`, items `text-muted-foreground`, hover and the current page
+  `bg-accent text-accent-foreground` (the sidebar's current-item colours), the bar
+  `border-primary`. Light mode looks the same, with item text slightly lighter
+  (`muted-foreground` instead of gray-600).
+
+### Added
+- Stories `SettingsContainer/OnDesktopInDark` and `OnPhoneInDark`.
+
 ## [0.9.2] - 2026-11-19
 
 ### Added
