@@ -32,6 +32,21 @@ describe('umamiBeforeSend()', () => {
     assert.equal(send('http://localhost:3000/pricing').url, 'http://localhost:3000/pricing');
   });
 
+  it('collapses nanoid ids under any segment', () => {
+    assert.equal(send('/orgs/o1/mail/thread/x2bgdkug05ot').url, '/orgs/[id]/mail/thread/[id]');
+    assert.equal(send('/orgs/o1/documents/Ab3dE6gH9jKl').url, '/orgs/[id]/documents/[id]');
+    assert.equal(send('/orgs/o1/dashboards/V1StGXR8_Z5jdHi6B-myT').url, '/orgs/[id]/dashboards/[id]');
+    assert.equal(send('/orgs/o1/runs/4f90d13a42e8a1b2c3d4e5f6?tab=log').url, '/orgs/[id]/runs/[id]?tab=log');
+  });
+
+  it('keeps kebab slugs, words and short segments that look like ids', () => {
+    assert.equal(send('/docs/v2-api-reference').url, '/docs/v2-api-reference');
+    assert.equal(send('/docs/getting-started-guide').url, '/docs/getting-started-guide');
+    assert.equal(send('/orgs/o1/integrations').url, '/orgs/[id]/integrations');
+    assert.equal(send('/orgs/o1/upload-status').url, '/orgs/[id]/upload-status');
+    assert.equal(send('/convert/hdfc-bank-2024').url, '/convert/hdfc-bank-2024');
+  });
+
   it('keeps content slugs and static paths', () => {
     assert.equal(send('/convert/hdfc-bank').url, '/convert/hdfc-bank');
     assert.equal(send('/').url, '/');

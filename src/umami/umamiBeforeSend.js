@@ -4,9 +4,10 @@
  * Umami `data-before-send` handler. Rewrites the `url` and `referrer` of every
  * payload so record ids never reach the analytics store and pages group by
  * route: `/orgs/<anything>` and statements' 12-character ids
- * (`/accounts/<id>`, `/statements/<id>`, …) become `[id]`, as do every UUID
- * and every numeric path segment. Content slugs (`/convert/hdfc-bank`) are
- * left alone.
+ * (`/accounts/<id>`, `/statements/<id>`, …) become `[id]`, as do every UUID,
+ * every numeric path segment and every nanoid-shaped segment (12–24 of
+ * `[A-Za-z0-9_-]` with a digit and a letter). Content slugs
+ * (`/convert/hdfc-bank`) are left alone.
  *
  * IMPORTANT: keep it self-contained (no module-scope references).
  * `UmamiAnalytics` serializes it with `toString()` into a `beforeInteractive`
@@ -28,7 +29,13 @@ export function umamiBeforeSend(type, payload) {
         /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g,
         '[id]',
       )
-      .replace(/\/\d+(?=[/?#]|$)/g, '/[id]');
+      .replace(/\/\d+(?=[/?#]|$)/g, '/[id]')
+      // nanoid ids (12–24 chars) in any app; lowercase kebab slugs stay.
+      .replace(/\/([A-Za-z0-9_-]{12,24})(?=[/?#]|$)/g, (segment, id) =>
+        /\d/.test(id) && /[A-Za-z]/.test(id) && !/^[a-z0-9]+(-[a-z0-9]+)+$/.test(id)
+          ? '/[id]'
+          : segment,
+      );
   };
 
   if (payload && typeof payload === 'object') {

@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.10.1] - 2026-11-26
+
+### Fixed
+- `umamiBeforeSend` strips nanoid ids under any path segment: a whole segment of 12–24
+  `[A-Za-z0-9_-]` with a digit and a letter becomes `[id]` (lowercase kebab slugs such as
+  `v2-api-reference` stay). Before, mail's `/mail/thread/<id>`, documents' `/documents/<id>` and
+  similar sent the raw id. No static route in any app matches the rule.
+
 ## [0.10.0] - 2026-11-26
 
 Product analytics move from Amplitude to the self-hosted Umami
