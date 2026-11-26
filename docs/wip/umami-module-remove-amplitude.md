@@ -1,12 +1,12 @@
-# Add `@fob/lib-ui/umami`, Remove Amplitude (v0.9.0)
+# Add `@fob/lib-ui/umami`, Remove Amplitude (v0.10.0)
 
-## Status: NOT STARTED
+## Status: IN PROGRESS (code done and committed; push and tag `v0.10.0` waiting on Alex's go-ahead)
 ## Priority: P3: every app's move off Amplitude waits on this release
 ## Bet: finopsbricks
 
 Add the Umami module that every app uses for product analytics (tracker, recorder, autocapture of
 clicks, submits and downloads, identify, server events), and remove `./amplitude` and its
-packages. Released as `v0.9.0`. Step 1 of the rollout tracked in
+packages. Released as `v0.10.0` (`v0.9.0` went to the standard tables release). Step 1 of the rollout tracked in
 `finopsbricks/ops/devops/docs/wip/rollout-umami-replace-amplitude-all-apps.md`.
 
 ---
@@ -58,7 +58,7 @@ src/umami/
   logs a failure once per event.
 - **Remove:** `src/amplitude.js`, `AmplitudeProvider.jsx`, `AmplitudeUserIdentifier.jsx`, the
   `./amplitude` export, `@amplitude/analytics-browser` and `@amplitude/plugin-session-replay-browser`.
-- **CHANGELOG** `0.9.0`: Added (the module), Removed (`./amplitude`), and "What apps must do":
+- **CHANGELOG** `0.10.0`: Added (the module), Removed (`./amplitude`), and "What apps must do":
   replace `AmplitudeProvider` with `<UmamiAnalytics />` and `AmplitudeUserIdentifier` with
   `<UmamiIdentify userId orgId />`, and set the two env vars.
 
@@ -72,28 +72,40 @@ src/umami/
 - **`/api/send` accepts `id` as the distinct id** (`src/app/api/send/route.ts:50`, stored as
   `distinctId`), so server events can carry the user id and join that user's sessions.
 
+## Decisions While Building (2026-11-26)
+
+- **Statements' id segments stay in `umamiBeforeSend`.** Its ids are 12-character strings (`STRING(12)`), neither UUIDs nor numbers, so `/accounts|statements|rules|categories|entities/<id>` keep their rule, as the standard allows.
+- **Links send the path only.** Query strings and hashes are dropped (they can carry search terms); external links send origin and path.
+- **`trackServerEvent` sends `hostname`** from `NEXT_PUBLIC_APP_URL` when set (11 apps have it), and the User-Agent `Mozilla/5.0 (compatible; fob-lib-ui)`, which isbot 5 lets through.
+- **Tested in a Next build:** mdm built against the module showed `script.js` (with `data-before-send`) and `recorder.js`, a working minified `window.umamiBeforeSend`, and `button_click` / `link_click` sent with ids stripped.
+
+## Known Limitations
+
+- lib-ui's own `package-lock.json` still lists `@amplitude/*` through its self-dependency `@fob/lib-ui` (pinned to 0.4.5, used by components that import `@fob/lib-ui`). Apps dedupe lib-ui, so they don't install it.
+
 ## Implementation Phases
 
 ### Phase 1: Check the two open questions ✅
 - [x] Read Umami 3.2.0's tracker and recorder source (answers above)
 
-### Phase 2: Client module ❌
-- [ ] `src/umami/umamiBeforeSend.js`, `UmamiAnalytics.jsx`, `UmamiIdentify.jsx`, `autocapture.js`, `index.js`
-- [ ] Tests: port statements' three test files (`identifyUser`, `trackEvent`, `umamiBeforeSend`) and add autocapture cases (each event, `data-umami-label`, skipping `[data-umami-event]`, no field values). lib-ui only runs Storybook tests, so use Node's built-in runner (`node --test`, no new dependency) if the files load under Node, else Storybook play stories; add it to CI
-- [ ] Story `Umami/Autocapture` with a fake `window.umami`, showing what each click sends
+### Phase 2: Client module ✅
+- [x] `src/umami/umamiBeforeSend.js`, `UmamiAnalytics.jsx`, `UmamiIdentify.jsx`, `autocapture.js`, `index.js`
+- [x] Tests: port statements' three test files (`identifyUser`, `trackEvent`, `umamiBeforeSend`) and add autocapture cases (each event, `data-umami-label`, skipping `[data-umami-event]`, no field values). lib-ui only runs Storybook tests, so use Node's built-in runner (`node --test`, no new dependency) if the files load under Node, else Storybook play stories; add it to CI
+- [x] Story `Umami/Autocapture` with a fake `window.umami`, showing what each click sends
 - [ ] Commit
 
-### Phase 3: Server module ❌
-- [ ] `src/umami/server.js` (`trackServerEvent`) with tests for the payload, missing env, and a failed fetch
+### Phase 3: Server module ✅
+- [x] `src/umami/server.js` (`trackServerEvent`) with tests for the payload, missing env, and a failed fetch
 - [ ] Commit
 
-### Phase 4: Remove Amplitude and release ❌
-- [ ] Delete the Amplitude files, export and packages; `grep -ri amplitude src package.json README.md CLAUDE.md` finds nothing
-- [ ] `exports` gains `./umami` and `./umami/server`
-- [ ] Standard: add the recorder-URL limitation
-- [ ] `CHANGELOG.md` 0.9.0 with "What apps must do"; version `0.9.0` in `package.json`
-- [ ] `npm run storybook:test:ci` and the new tests pass
-- [ ] Commit, tag `v0.9.0`, push with the tag
+### Phase 4: Remove Amplitude and release 🔄
+- [x] Delete the Amplitude files, export and packages; `grep -ri amplitude src package.json README.md CLAUDE.md` finds nothing
+- [x] `exports` gains `./umami` and `./umami/server`
+- [x] Standard: add the recorder-URL limitation
+- [x] `CHANGELOG.md` 0.10.0 with "What apps must do"; version `0.10.0` in `package.json`
+- [x] `npm run storybook:test:ci` (243 passed) and `npm run test:unit` (20 passed)
+- [x] Commit
+- [ ] Tag `v0.10.0`, push with the tag
 - [ ] Mark ✅ in the rollout WIP
 
 ## Related Files

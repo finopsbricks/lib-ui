@@ -37,6 +37,11 @@ This package is part of the **FinOpsBricks** monorepo (`/Users/alex/ec2code/fino
 ### Utilities
 - `cn()` - Tailwind class merger
 
+### Analytics (`./umami`, `./umami/server`)
+- `UmamiAnalytics`, `UmamiIdentify`, `trackEvent`, `trackServerEvent`: self-hosted Umami,
+  per `engineering-standards/architecture/analytics/umami-product-analytics.md`.
+  Plain-JS parts are tested with `npm run test:unit` (`tests/umami/`).
+
 ### Hooks
 - `useIsMobile()` - Mobile breakpoint hook
 

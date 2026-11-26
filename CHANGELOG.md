@@ -15,6 +15,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.10.0] - 2026-11-26
+
+Product analytics move from Amplitude to the self-hosted Umami
+(`umami.finopsbricks.com`). Standard:
+`engineering-standards/architecture/analytics/umami-product-analytics.md`.
+
+### Added
+- **`@fob/lib-ui/umami`**:
+  - `<UmamiAnalytics />` for the root layout. It loads the tracker (`script.js`), the
+    recorder (`recorder.js`, replays and heatmaps) and a `data-before-send` handler that
+    strips ids from every URL (`/orgs/<id>`, statements' id segments, UUIDs, numeric
+    segments → `[id]`). It also sends `button_click {label}`, `link_click {href}`,
+    `file_download {href}` and `form_submit {form}` for clicks and submits, never page
+    text or field values. It skips `/admin` and `/staff`, and renders nothing unless
+    `NEXT_PUBLIC_UMAMI_HOST_URL` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` are set.
+  - `<UmamiIdentify userId orgId />`: identifies the session with opaque ids only.
+  - `trackEvent(name, data)`, `identifyUser(user_id, session_data)`, `umamiBeforeSend`.
+- **`@fob/lib-ui/umami/server`**: `trackServerEvent(name, { user_id, org_id, url, data })` posts
+  to Umami's `/api/send` with the user id as the distinct id. It never throws.
+- `npm run test:unit` (Node's test runner) for the module, run in CI. Story `Umami/Autocapture`.
+
+### Removed
+- **`@fob/lib-ui/amplitude`** (`AmplitudeProvider`, `useAmplitude`, `AmplitudeUserIdentifier`)
+  and the `@amplitude/*` dependencies.
+
+### What apps must do
+- `src/app/layout.jsx`: drop `AmplitudeProvider` (keep its children) and render
+  `<UmamiAnalytics />` from `@fob/lib-ui/umami` inside `<body>`.
+- Signed-in layout (usually `AppSidebar.jsx`): replace `<AmplitudeUserIdentifier user={user} />`
+  with `<UmamiIdentify userId={user.id} orgId={params?.o_id} />`.
+- Add `data-umami-label` to buttons whose text is data (org switcher → `org_switcher`, user menu →
+  `user_menu`, row buttons showing a name).
+- Server events: replace Amplitude's node SDK with `trackServerEvent` after the `EventLogs` write.
+- Remove the `@amplitude/*` packages and `AMPLITUDE_API_KEY`. Set `NEXT_PUBLIC_UMAMI_HOST_URL` and
+  `NEXT_PUBLIC_UMAMI_WEBSITE_ID` in the env store before the deploy (they are build-time).
+- An app whose ids are neither UUIDs nor numbers needs its id segment added to `umamiBeforeSend`.
+
 ## [0.9.3] - 2026-11-23
 
 ### Fixed
